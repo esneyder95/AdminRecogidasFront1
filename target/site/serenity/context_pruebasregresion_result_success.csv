@@ -1,0 +1,5 @@
+"Story","Title","Result","Date","Stability","Duration (s)"
+"Usuario crea prenvios diferentes modos de pago","Crear preenvio de contado","SUCCESS","2022-11-24T00:58:14.29-05:00[America/Bogota]","0.0","225.1"
+"Usuario crea prenvios diferentes modos de pago","Crear preenvio pago en casa","SUCCESS","2022-11-24T01:02:00.623-05:00[America/Bogota]","0.0","171.55"
+"Usuario crea prenvios diferentes modos de pago","Crear preenvio al cobro","SUCCESS","2022-11-24T01:04:53.172-05:00[America/Bogota]","0.0","165.67"
+"Usuario crea prenvios diferentes modos de pago","Crear preenvio con convenio","SUCCESS","2022-11-24T01:07:39.855-05:00[America/Bogota]","0.0","169.7"
