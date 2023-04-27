@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
         plugin = {"pretty" }
         ,features="src/test/resources/features"
         ,glue="com.Inter.AdminRecogidas"
-        ,tags = "@PruebasRegresion1"
+        ,tags = "@PruebasRegresion"
 )
 public class RunnerAdmin {
 
