@@ -3,10 +3,8 @@ package com.Inter.AdminRecogidas.steps;
 import com.Inter.AdminRecogidas.pageObjects.DatosPersonalesPage;
 import com.Inter.AdminRecogidas.pageObjects.DatosRecogidaPage;
 import com.Inter.AdminRecogidas.pageObjects.PantallaconfirmacionPage;
-
 import com.opencsv.exceptions.CsvValidationException;
 import net.thucydides.core.annotations.Step;
-
 import java.io.IOException;
 
 public class AdminformularioSteps {
@@ -21,7 +19,7 @@ public class AdminformularioSteps {
     }
 
     @Step
-    public void ingresalosdatosdePersonales() throws CsvValidationException, IOException {
+    public void ingresalosdatosdePersonales() {
         datosPersonalesPage.DatosPersonales();
     }
 
@@ -39,10 +37,7 @@ public class AdminformularioSteps {
     public void regresohomeexitoso() {
         datosPersonalesPage.regresohome();
     }
-    /*@Step
-    public void Enviaelformulario(){
-        datosRecogidaPage.EnviarFormulario();
-    }*/
+
     @Step
     public void solicituddelarecogida() {
         pantallaconfirmacionPage.formularioexitoso();
@@ -59,15 +54,14 @@ public class AdminformularioSteps {
     }
 
     @Step
-    public void ingresalosdatosdePersonalesFR() {
-        datosPersonalesPage.DatosPersonalesPOS();
+    public void ingresalosdatosdePersonalesFR(String Cedula, String Celular) {
+        datosPersonalesPage.DatosPersonalesPOS(Cedula,Celular);
     }
 
     @Step
-    public void ingresalosdatosdePersonalesPOS() {
-        datosPersonalesPage.DatosPersonalesPOS();
+    public void ingresalosdatosdePersonalesPOS(String Cedula, String Celular) {
+        datosPersonalesPage.DatosPersonalesPOS(Cedula,Celular);
     }
-
 
     @Step
     public void ingresalosdatosdeRecogidaF() {
@@ -88,4 +82,34 @@ public class AdminformularioSteps {
     public void IngresoTusRecogidas(){
         datosRecogidaPage.IngresoTusRecogidas();
     }
+    @Step
+    public void TusRecogidas(){
+        datosRecogidaPage.TusRecogidas();
+    }
+    @Step
+    public void seleccionologo(){
+        datosPersonalesPage.linkinterrapidisimo();
+    }
+    @Step
+    public void linkinterexitoso(){
+        datosPersonalesPage.linkexitosointer();
+    }
+    @Step
+    public void seleccionopoliticadatos(){
+        datosRecogidaPage.linkpoliticadatos();
+    }
+    @Step
+    public void linkpoliticadatosexitoso(){
+        datosRecogidaPage.linkexitosopoliticadatos();
+    }
+
+    @Step
+    public void seleccionterminos(){
+        datosRecogidaPage.linkterminos();
+    }
+    @Step
+    public void linkterminosexitoso(){
+        datosRecogidaPage.linkexitosoterminos();
+    }
+
 }

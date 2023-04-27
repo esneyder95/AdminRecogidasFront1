@@ -1,56 +1,114 @@
 package com.Inter.AdminRecogidas.utils;
 
-import javax.xml.crypto.dom.DOMCryptoContext;
+import net.serenitybdd.core.pages.PageObject;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+
+import java.math.BigInteger;
 import java.util.Random;
 
-public class DataRandom {
+public class DataRandom extends PageObject {
+
+    InteractorTime interactorTime = new InteractorTime();
+    public By cotizacionTpaquete = By.xpath("//div[@id='DatosCotizacion']/div[1]/div[1]/form/div[7]/select");
 
     public static String NumeroCelular() {
-        long cel = (long) (Math.random() * (99999999L - 10000000L)) + 10000000L;
-        int cel2 = (int) (Math.random() * (2 - 0)) + 0;
-        String NumCel = ("3" + cel2 + cel);
+        String NumCel = "";
+        String celu1 = "";
+        String celu2 = "";
+        String celu3 = "";
+        int cel1 = (int) (1 + (Math.random() * 299));
+        int cel2 = (int) (1 + (Math.random() * 999));
+        int cel3 = (int) (1 + (Math.random() * 999));
+        if (cel1<100 && cel1>10){
+            celu1 = ("0" + cel1);
+        }else if (cel1<10){
+            celu1 = ("00" + cel1);
+        }else{
+            celu1 = String.valueOf(cel1);
+        }
+        if (cel2<100 && cel2>10){
+            celu2 = ("0" + cel2);
+        }else if (cel2<10){
+            celu2 = ("00" + cel2);
+        }else{
+            celu2 = String.valueOf(cel2);
+        }
+        if (cel3<100 && cel3>10){
+            celu3 = ("0" + cel3);
+        }else if (cel3<10){
+            celu3 = ("00" + cel3);
+        }else{
+            celu3 = String.valueOf(cel3);
+        }
+        NumCel = ("3" + celu1 + celu2 + celu3);
         return NumCel;
     }
 
-    public static String Cedula() {
+    public static String Cedula(){
+        String cedula = "";
         long ced = 0;
-        int longitud = (int) (Math.random()*(12 - 5) + 5);
+        int longitud = (int) (5 + Math.random() * 18);
         switch (longitud){
             case 5:{
-                ced = (long) (Math.random() * (99999L - 10000L)) + 10000L;
+                ced = (long) (10000L + Math.random() * 99999L);
                 break;
             }
             case 6:{
-                ced = (long) (Math.random() * (999999L - 100000L)) + 100000L;
+                ced = (long) (100000L + Math.random() * 999999L);
                 break;
             }
             case 7:{
-                ced = (long) (Math.random() * (9999999L - 1000000L)) + 10000L;
+                ced = (long) (1000000L + Math.random() * 9999999L);
                 break;
             }
             case 8:{
-                ced = (long) (Math.random() * (99999999L - 10000000L)) + 100000L;
+                ced = (long) (10000000L + Math.random() * 99999999L);
                 break;
             }
             case 9:{
-                ced = (long) (Math.random() * (999999999L - 100000000L)) + 1000000L;
+                ced = (long) (100000000L + Math.random() * 999999999L);
                 break;
             }
             case 10:{
-                ced = (long) (Math.random() * (9999999999L - 1000000000L)) + 10000000L;
+                ced = (long) (1000000000L + Math.random() * 9999999999L);
                 break;
             }
             case 11:{
-                ced = (long) (Math.random() * (99999999999L - 10000000000L)) + 100000000L;
+                ced = (long) (10000000000L + Math.random() * 99999999999L);
                 break;
             }
             case 12:{
-                ced = (long) (Math.random() * (999999999999L - 100000000000L)) + 1000000000L;
+                ced = (long) (100000000000L + Math.random() * 999999999999L);
+                break;
+            }
+            case 13:{
+                ced = (long) (1000000000000L + Math.random() * 9999999999999L);
+                break;
+            }
+            case 14:{
+                ced = (long) (10000000000000L + Math.random() * 99999999999999L);
+                break;
+            }
+            case 15:{
+                ced = (long) (100000000000000L + Math.random() * 999999999999999L);
+                break;
+            }
+            case 16:{
+                ced = (long) (1000000000000000L + Math.random() * 9999999999999999L);
+                break;
+            }
+            case 17:{
+                ced = (long) (10000000000000000L + Math.random() * 99999999999999999L);
+                break;
+            }
+            case 18:{
+                ced = (long) (100000000000000000L + Math.random() * 999999999999999999L);
                 break;
             }
         }
-        String Ced = ("" + ced);
-        return Ced;
+        cedula = Long.toString(ced);
+        return cedula;
     }
 
     public static String CorreoElectronico() {
@@ -67,13 +125,22 @@ public class DataRandom {
         char letra1 = (char) (Caracter.nextInt(26) + 'A');
         char letra2 = (char) (Caracter.nextInt(26) + 'A');
         char letra3 = (char) (Caracter.nextInt(26) + 'A');
-        String Nom = ("ESNEYDE"+ letra1 + letra2 + letra3 +" GUTIERRE"+ letra3 + letra2 + letra1);
+        String Nom = ("ESNEYDE"+ letra1 + letra2 + letra3);
         return Nom;
+    }
+
+    public  static  String Apellido(){
+        Random Caracter = new Random();
+        char letra1 = (char) (Caracter.nextInt(26) + 'A');
+        char letra2 = (char) (Caracter.nextInt(26) + 'A');
+        char letra3 = (char) (Caracter.nextInt(26) + 'A');
+        String Apel = ("GUTIERRE"+ letra3 + letra2 + letra1);
+        return Apel;
     }
 
     public static String Ciudad() {
         String Ciud = new String();
-        int longitud = (int) (Math.random() * (29 - 1) + 1);
+        int longitud = (int) (1 + (Math.random() * 32));
         switch (longitud) {
             case 1: {
                 Ciud = ("MEDELLIN\\ANT\\COL");
@@ -183,13 +250,33 @@ public class DataRandom {
                 Ciud = ("CALI\\VALL\\COL");
                 break;
             }
+            case 28: {
+                Ciud = ("MITU\\VAUP\\COL");
+                break;
+            }
+            case 29: {
+                Ciud = ("LETICIA\\AMAZ\\COL");
+                break;
+            }
+            case 30: {
+                Ciud = ("SAN ANDRES ARCHIPIELAGO DE SAN ANDRES , PROVIDENCIA Y SANTA CATALINA\\ARCH\\COL");
+                break;
+            }
+            case 31: {
+                Ciud = ("SINCELEJO\\SUCR\\COL");
+                break;
+            }
+            case 32: {
+                Ciud = ("PUERTO CARRENO\\VICH\\COL");
+                break;
+            }
         }
         return Ciud;
     }
 
     public static String CiudadAPP() {
         String Ciud = new String();
-        int longitud = (int) (Math.random() * (3 - 1) + 1);
+        int longitud = (int) (1 + (Math.random() * 2));
         switch (longitud) {
             case 1: {
                 Ciud = ("MEDELLIN\\ANT\\COL");
@@ -205,7 +292,7 @@ public class DataRandom {
 
     public static String Donde() {
         String Don = new String();
-        int longitud = (int) (Math.random() * (4 - 1) + 1);
+        int longitud = (int) (1 + (Math.random() * 4));
         switch (longitud){
             case 1: {
                 Don = "CENTROS PENITENCIARIOS";
@@ -227,27 +314,35 @@ public class DataRandom {
         return Don;
     }
 
-    public static String paquete() {
-        String paq = new String();
-        int longitud = (int) (Math.random() * (4 - 1) + 1);
+    public void paquete() {
+        int longitud = (int) (1 + (Math.random() * 4));
         switch (longitud){
             case 1: {
-                paq = "PAQUETE PEQUEÑO";
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
                 break;
             }
             case 2: {
-                paq = "SOBRE CARTA";
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
                 break;
             }
             case 3: {
-                paq = "SOBRE MANILA";
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
                 break;
             }
             case 4: {
-                paq = "TULA";
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
                 break;
             }
         }
-        return paq;
     }
 }

@@ -1,12 +1,9 @@
 package com.Inter.AdminRecogidas.definitions;
 
-import com.Inter.AdminRecogidas.pageObjects.DatosDestinatario;
 import com.Inter.AdminRecogidas.steps.AdminformularioSteps;
 import com.Inter.AdminRecogidas.steps.EditarRecogidasSteps;
 import com.Inter.AdminRecogidas.steps.PreenviosSteps;
 import com.Inter.AdminRecogidas.steps.CvsSteps;
-import com.Inter.AdminRecogidas.pageObjects.DatosPersonalesPage;
-
 import com.Inter.AdminRecogidas.utils.DataCvs;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
@@ -15,25 +12,17 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.sl.Ce;
 import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.screenplay.actions.Switch;
-//import org.jruby.RubyProcess;
-
-import javax.swing.plaf.synth.SynthEditorPaneUI;
+import org.openqa.selenium.By;
 import java.io.IOException;
-import java.sql.SQLSyntaxErrorException;
-
-import static java.sql.DriverManager.getDriver;
 
 public class AdminformularioDefinitions extends PageObject {
+
+    public By recogida1 = By.xpath("//div[@name='registros']/ul[1]/li[4]");
     AdminformularioSteps adminformularioSteps = new AdminformularioSteps();
     PreenviosSteps preenviosSteps = new PreenviosSteps();
-
     CvsSteps cvsSteps = new CvsSteps();
-
     DataCvs dataCvs = new DataCvs();
-
     EditarRecogidasSteps editarRecogidasSteps = new EditarRecogidasSteps();
 
     @Given("Ingresa la pagina de recogidas")
@@ -75,10 +64,17 @@ public class AdminformularioDefinitions extends PageObject {
     }
 
     @When("Ingreso la informacion solicitada.")
-    public void IngresoLaInformacionDeCotizacion() {
+    public void IngresoLaInformacionDeCotizacioncongeo() {
         editarRecogidasSteps.agregarpreenvio("listado");
-        preenviosSteps.informaciondecotizacion("");
-        preenviosSteps.informaciondedestinatario();
+        preenviosSteps.informaciondecotizacion("carguedatos");
+        preenviosSteps.informaciondedestinatariocongeo();
+    }
+
+    @When("Solicito la informacion solicitada.")
+    public void IngresoLaInformacionDeCotizacionsingeo() {
+        editarRecogidasSteps.agregarpreenvio("listado");
+        preenviosSteps.informaciondecotizacion("carguedatos");
+        preenviosSteps.informaciondedestinatariosingeo();
     }
 
     @When("Regreso de cotiza tu envio")
@@ -137,18 +133,6 @@ public class AdminformularioDefinitions extends PageObject {
         }
     }
 
-    @Given("Ingreso a la opcion de Agregar otro preenvio")
-    public void AgregarOtroPreenvio() throws CsvValidationException, IOException {
-        adminformularioSteps.ingresalapaginaderecogidas();
-        adminformularioSteps.ingresalosdatosdePersonales();
-        adminformularioSteps.secargalapaginarecogidas();
-        adminformularioSteps.ingresalosdatosdeRecogida();
-        adminformularioSteps.solicituddelarecogidanuevopreenvio();
-        preenviosSteps.informaciondecotizacion("");
-        preenviosSteps.informaciondedestinatario();
-        preenviosSteps.SolicitudNuevoPrenvioExitoso();
-    }
-
     @Given("Documento de todos los clientes")
     public void DocumentoUsuarios() throws CsvValidationException, IOException {
         cvsSteps.determinodata("Recogida");
@@ -189,7 +173,6 @@ public class AdminformularioDefinitions extends PageObject {
             adminformularioSteps.secargalapaginarecogidas();
             adminformularioSteps.ingresalosdatosdeRecogida();
             adminformularioSteps.solicituddelarecogida();
-            adminformularioSteps.IngresoTusRecogidas();
         }else {
             adminformularioSteps.ingresalapaginaderecogidas();
             adminformularioSteps.ingresalosdatosdePersonalesF(Cedula, Celular);
@@ -239,7 +222,7 @@ public class AdminformularioDefinitions extends PageObject {
             adminformularioSteps.solicituddelarecogidanuevopreenvio();
             preenviosSteps.informaciondecotizacion("");
             preenviosSteps.informaciondedestinatario();
-            preenviosSteps.SolicitudNuevoPrenvioExitoso();
+            preenviosSteps.SolicitudPrenvioExitoso();
         }else {
             adminformularioSteps.ingresalapaginaderecogidas();
             adminformularioSteps.ingresalosdatosdePersonalesF(Cedula, Celular);
@@ -248,7 +231,7 @@ public class AdminformularioDefinitions extends PageObject {
             adminformularioSteps.solicituddelarecogidanuevopreenvio();
             preenviosSteps.informaciondecotizacion("");
             preenviosSteps.informaciondedestinatario();
-            preenviosSteps.SolicitudNuevoPrenvioExitoso();
+            preenviosSteps.SolicitudPrenvioExitoso();
         }
     }
 
@@ -256,61 +239,62 @@ public class AdminformularioDefinitions extends PageObject {
     @Given("Dado un listado de recogidas {} {}")
     public void ListaRecogidas(String Cedula, String Celular) throws CsvValidationException, IOException {
         adminformularioSteps.ingresalapaginaderecogidas();
+        if (Cedula.equals("NuevoAgreg") || Cedula.equals("NuevoBorra") || Cedula.equals("NuevoDesas") || Cedula.equals("NuevoCance")){
+            adminformularioSteps.ingresalosdatosdePersonales();
+            adminformularioSteps.ingresalosdatosdeRecogida();
+            adminformularioSteps.solicituddelarecogidanuevopreenvio();
+            preenviosSteps.informaciondecotizacion("otrodato");
+            preenviosSteps.informaciondedestinatario();
+            preenviosSteps.SolicitudPrenvioExitosa();
+            adminformularioSteps.TusRecogidas();
+            editarRecogidasSteps.editarrecogida();
+        }else{
+            switch (Cedula){
+                case "NuevoEdita": {
+                    adminformularioSteps.ingresalosdatosdePersonales();
+                    adminformularioSteps.ingresalosdatosdeRecogida();
+                    adminformularioSteps.solicituddelarecogidanuevopreenvio();
+                    preenviosSteps.informaciondecotizacion("otrodato");
+                    preenviosSteps.informaciondedestinatario();
+                    preenviosSteps.SolicitudPrenvioExitosa();
+                    adminformularioSteps.TusRecogidas();
+                    editarRecogidasSteps.editarrecogida();
+                    break;
+                }
+                case "NuevoAsoci": {
+                    adminformularioSteps.ingresalosdatosdePersonales();
+                    adminformularioSteps.ingresalosdatosdeRecogida();
+                    adminformularioSteps.solicituddelarecogidanuevopreenvio();
+                    preenviosSteps.informaciondecotizacion("otrodato");
+                    preenviosSteps.informaciondedestinatario();
+                    preenviosSteps.SolicitudPrenvioExitosa();
+                    adminformularioSteps.TusRecogidas();
+                    editarRecogidasSteps.editarrecogida();
+                    editarRecogidasSteps.desasociarpreenvio();
+                    break;
+                }
+                default: {
+                    adminformularioSteps.ingresalosdatosdePersonalesF(Cedula, Celular);
+                    adminformularioSteps.IngresoTusRecogidas();
+                    if (getDriver().findElement(recogida1).getText().equals("0")) {
+                        editarRecogidasSteps.agregarpreenvio("listado");
+                        preenviosSteps.informaciondecotizacion("");
+                        preenviosSteps.informaciondedestinatario();
+                        preenviosSteps.SolicitudPrenvioExitosa();
+                        adminformularioSteps.TusRecogidas();
+                        editarRecogidasSteps.editarrecogida();
+                    } else {
+                        editarRecogidasSteps.editarrecogida();
+                    }
+                }
+            }
+        }
+    }
+
+    @Given("Dado un listado de recogidas. {} {}")
+    public void asociarpreenvio(String Cedula, String Celular) throws CsvValidationException, IOException {
+        adminformularioSteps.ingresalapaginaderecogidas();
         switch (Cedula){
-            case "NuevoEdita": {
-                adminformularioSteps.ingresalosdatosdePersonales();
-                adminformularioSteps.ingresalosdatosdeRecogida();
-                adminformularioSteps.solicituddelarecogidanuevopreenvio();
-                preenviosSteps.informaciondecotizacion("otrodato");
-                preenviosSteps.informaciondedestinatario();
-                preenviosSteps.SolicitudPrenvioExitosa();
-                adminformularioSteps.IngresoTusRecogidas();
-                editarRecogidasSteps.editarrecogida();
-                break;
-            }
-            case "NuevoAgreg": {
-                adminformularioSteps.ingresalosdatosdePersonales();
-                adminformularioSteps.ingresalosdatosdeRecogida();
-                adminformularioSteps.solicituddelarecogidanuevopreenvio();
-                preenviosSteps.informaciondecotizacion("otrodato");
-                preenviosSteps.informaciondedestinatario();
-                preenviosSteps.SolicitudPrenvioExitosa();
-                adminformularioSteps.IngresoTusRecogidas();
-                editarRecogidasSteps.editarrecogida();
-                break;
-            }
-            case "NuevoBorra": {
-                adminformularioSteps.ingresalosdatosdePersonales();
-                adminformularioSteps.ingresalosdatosdeRecogida();
-                adminformularioSteps.solicituddelarecogidanuevopreenvio();
-                preenviosSteps.informaciondecotizacion("otrodato");
-                preenviosSteps.informaciondedestinatario();
-                preenviosSteps.SolicitudPrenvioExitosa();
-                adminformularioSteps.IngresoTusRecogidas();
-                editarRecogidasSteps.editarrecogida();
-                /*editarRecogidasSteps.agregarpreenvio("recogida");
-                preenviosSteps.informaciondecotizacion("");
-                preenviosSteps.informaciondedestinatario();
-                preenviosSteps.SolicitudPrenvioExitosa();
-                editarRecogidasSteps.editarrecogida();*/
-                break;
-            }
-            case "NuevoDesas": {
-                adminformularioSteps.ingresalosdatosdePersonales();
-                adminformularioSteps.ingresalosdatosdeRecogida();
-                adminformularioSteps.solicituddelarecogidanuevopreenvio();
-                preenviosSteps.informaciondecotizacion("otrodato");
-                preenviosSteps.informaciondedestinatario();
-                preenviosSteps.SolicitudPrenvioExitosa();
-                adminformularioSteps.IngresoTusRecogidas();
-                editarRecogidasSteps.editarrecogida();
-                /*editarRecogidasSteps.agregarpreenvio("recogida");
-                preenviosSteps.informaciondecotizacion("");
-                preenviosSteps.informaciondedestinatario();
-                preenviosSteps.SolicitudPrenvioExitosa();
-                editarRecogidasSteps.editarrecogida();*/
-                break;
-            }
             case "NuevoAsoci": {
                 adminformularioSteps.ingresalosdatosdePersonales();
                 adminformularioSteps.ingresalosdatosdeRecogida();
@@ -318,33 +302,15 @@ public class AdminformularioDefinitions extends PageObject {
                 preenviosSteps.informaciondecotizacion("otrodato");
                 preenviosSteps.informaciondedestinatario();
                 preenviosSteps.SolicitudPrenvioExitosa();
-                adminformularioSteps.IngresoTusRecogidas();
+                adminformularioSteps.TusRecogidas();
                 editarRecogidasSteps.editarrecogida();
                 editarRecogidasSteps.desasociarpreenvio();
-                /*editarRecogidasSteps.agregarpreenvio("recogida");
-                preenviosSteps.informaciondecotizacion("");
-                preenviosSteps.informaciondedestinatario();
-                preenviosSteps.SolicitudPrenvioExitosa();
-                editarRecogidasSteps.editarrecogida();
-                editarRecogidasSteps.desasociarpreenvio();*/
                 break;
             }
-            case "NuevoCance": {
-                adminformularioSteps.ingresalosdatosdePersonales();
-                adminformularioSteps.ingresalosdatosdeRecogida();
-                adminformularioSteps.solicituddelarecogidanuevopreenvio();
-                preenviosSteps.informaciondecotizacion("otrodato");
-                preenviosSteps.informaciondedestinatario();
-                preenviosSteps.SolicitudPrenvioExitosa();
-                adminformularioSteps.IngresoTusRecogidas();
-                editarRecogidasSteps.editarrecogida();
-                break;
-            }
-            default:
+            default: {
                 adminformularioSteps.ingresalosdatosdePersonalesF(Cedula, Celular);
                 adminformularioSteps.IngresoTusRecogidas();
-                editarRecogidasSteps.editarrecogida();
-                break;
+            }
         }
     }
 
@@ -430,10 +396,10 @@ public class AdminformularioDefinitions extends PageObject {
 
     ////////////////////////////////////////////////////////Pruebas de afectacion/////////////////////////////////////////////////////////////////////////////
 
-    @Given("Usuario frecuente ingresa a tus recogidas")
-    public void IngresoRecogidas(){
+    @Given("Usuario frecuente ingresa a tus recogidas {} {}")
+    public void IngresoRecogidas(String Cedula, String Celular){
         adminformularioSteps.ingresalapaginaderecogidas();
-        adminformularioSteps.ingresalosdatosdePersonalesFR();
+        adminformularioSteps.ingresalosdatosdePersonalesFR(Cedula,Celular);
         adminformularioSteps.IngresoTusRecogidas();
     }
 
@@ -441,13 +407,12 @@ public class AdminformularioDefinitions extends PageObject {
     public void PreenvioContado(){
         cvsSteps.diferentespreenvios();
         adminformularioSteps.solicituddelarecogida();
-        adminformularioSteps.IngresoTusRecogidas();
         preenviosSteps.opciondeAgregarenvios();
         preenviosSteps.cotizaEnviocontado();
     }
 
     @When("Ingreso datos de preenvio pago en casa")
-    public void PreenvioPagoCasa(){
+    public void PreenvioPagoCasaSinVerificacion(){
         preenviosSteps.opciondeAgregarenvios();
         preenviosSteps.cotizaEnvioPagoEnCasa();
     }
@@ -466,15 +431,14 @@ public class AdminformularioDefinitions extends PageObject {
     @Then("El preenvio se crea exitosamente")
     public void FormularioPreenvio() throws IOException {
         preenviosSteps.SolicitudNuevoPrenvioExitoso();
-        System.out.println("Cliente con Numero de Cedula: 1024567308 crea un preenvio exitosamente");
     }
 
     //////////////////////////////////////////////// FUNCIONALIDADES BASICAS ///////////////////////////////////////////////////////////////////////////////////////
 
-    @Given("Un preenvio cotizado")
-    public void cotizopreenvio(){
+    @Given("Un preenvio cotizado {} {}")
+    public void cotizopreenvio(String Cedula, String Celular){
         adminformularioSteps.ingresalapaginaderecogidas();
-        adminformularioSteps.ingresalosdatosdePersonalesFR();
+        adminformularioSteps.ingresalosdatosdePersonalesFR(Cedula,Celular);
         adminformularioSteps.IngresoTusRecogidas();
         editarRecogidasSteps.agregarpreenvio("listado");
         preenviosSteps.informaciondecotizacion("carguedatos");
@@ -490,10 +454,10 @@ public class AdminformularioDefinitions extends PageObject {
         preenviosSteps.cargueexitosodestinatario();
     }
 
-    @Given("Un preenvio cotizado pago en casa")
-    public void cotizopagoencasa(){
+    @Given("Preenvio cotizado pago en casa {} {}")
+    public void cotizopagoencasa(String Cedula, String Celular){
         adminformularioSteps.ingresalapaginaderecogidas();
-        adminformularioSteps.ingresalosdatosdePersonalesFR();
+        adminformularioSteps.ingresalosdatosdePersonalesFR(Cedula,Celular);
         adminformularioSteps.IngresoTusRecogidas();
         editarRecogidasSteps.agregarpreenvio("listado");
         preenviosSteps.cotizaPagoEnCasa();
@@ -509,6 +473,39 @@ public class AdminformularioDefinitions extends PageObject {
         preenviosSteps.actualizacuentaexitoso();
     }
 
+    @Given("Pagina principal de recogidas")
+    public void abrirpagina(){
+        adminformularioSteps.ingresalapaginaderecogidas();
+    }
+
+    @When("Selecciono logo de interrapidisimo")
+    public void seleccionarlogo(){
+        adminformularioSteps.seleccionologo();
+    }
+
+    @Then("Direccionamineto pagina oficial interrapidismo exitosa")
+    public void linkinterexitoso(){
+        adminformularioSteps.linkinterexitoso();
+    }
+    @When("Selecciono link tratamiento de politica datos")
+    public void seleccionarpolitcadatos(){
+        adminformularioSteps.seleccionopoliticadatos();
+    }
+
+    @Then("Direccionamineto politica datos exitosa")
+    public void linkpoliticadatosexitoso(){
+        adminformularioSteps.linkpoliticadatosexitoso();
+    }
+
+    @When("Selecciono link terminos y condiciones")
+    public void seleccionarterminos(){
+        adminformularioSteps.seleccionterminos();
+    }
+
+    @Then("Direccionamineto terminos y condiciones exitosa")
+    public void linkterminosexitoso(){
+        adminformularioSteps.linkterminosexitoso();
+    }
     ///////////////////////////////////////////////////////////// CONTROLLER APP ////////////////////////////////////////////////////////////////////////////////////////////////
     @When("Ingreso diferentes preenvios {} {}")
     public void diferentespreenvios(String cedula, String celular) throws IOException {
@@ -560,10 +557,10 @@ public class AdminformularioDefinitions extends PageObject {
     }
 ////////////////////////////////////////////////////////////////////////PRUEBAS POS//////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Given("Usuario ingresa a tus recogidas")
-    public void IngresoRecogidasPOS(){
+    @Given("Usuario ingresa a tus recogidas {} {}")
+    public void IngresoRecogidasPOS(String Cedula, String Celular){
         adminformularioSteps.ingresalapaginaderecogidas();
-        adminformularioSteps.ingresalosdatosdePersonalesPOS();
+        adminformularioSteps.ingresalosdatosdePersonalesPOS(Cedula,Celular);
         adminformularioSteps.IngresoTusRecogidas();
     }
 

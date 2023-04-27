@@ -2,102 +2,184 @@ package com.Inter.AdminRecogidas.pageObjects;
 
 import com.Inter.AdminRecogidas.utils.DataCvs;
 import com.Inter.AdminRecogidas.utils.DataRandom;
-import com.Inter.AdminRecogidas.utils.ServiciosRandom;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.*;
-
 import net.serenitybdd.core.pages.PageObject;
 import com.Inter.AdminRecogidas.utils.InteractorTime;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-
+import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class CotizaciondeenviosPage extends PageObject{
 
     InteractorTime interactorTime = new InteractorTime();
-    ServiciosRandom serviciosRandom = new ServiciosRandom();
+    ListadoTusRecogidas listadoTusRecogidas = new ListadoTusRecogidas();
+    DataRandom dataRandom = new DataRandom();
     int respuesta = 0;
-
     public By cotizacionCiudad = By.id("CiudadDestino");
     public By cotizaciondonde = By.xpath("//div[@id='DatosCotizacion']/div[1]/div[1]/form/div[6]/select");
     public By cotizacionTpaquete = By.xpath("//div[@id='DatosCotizacion']/div[1]/div[1]/form/div[7]/select");
     public By cotizacionContiene = By.xpath("//input[@placeholder='Ej: Reproductor de música']");
-    public By pagoencasa = By.id("SelectedIncluirPagoEnCasa");
-
-    public By nopagoencasa = By.id("SelectedNoIncluirPagoEnCasa");
-    public By alcontado = By.xpath("//div[@class='form-group col-xs-12 payment-way no-padding-left ']/div[1]");
+    public By pagoencasa = By.xpath("//div[@class='card col-xs-12 col-md-6 ']/div/span[2]/div/label/span");
+    public By nopagoencasa = By.xpath("//div[@id='DatosCotizacion']/div/div/form/div[13]/div/div[2]/div/span[2]/div/label/span");
+    public By pagoencasadeshabilitado = By.xpath("//div[@id='DatosCotizacion']/div/div/form/div[13]");
+    public By alcontado = By.xpath("//div[@class='card col-xs-12 col-md-6  ']/div/span[2]/div/label/span");
     public By CotizarPreenvio = By.id("CotizarPreenvio");
-
     public By clientecorporativo = By.xpath("//div[@class='form-group col-md-3 col-xs-12 customer-agreement no-padding-right']/div[1]/label");
-
     public By confirmarCuenta = By.xpath("//div[@class='col-xs-12']/form/div[3]/button");
-
     public By convenio = By.xpath("//input[@placeholder='Código del convenio']");
-
-    public By agregarpreenvio = By.xpath("//div[@class='disassociated-preshippings-container']/div[1]/form/div[3]/a");
-
-    public By regresar = By.xpath("//div[@class='col-xs-12 form-container']/form/div[16]/a");
-
+    public By errorconvenio = By.xpath("//div[@id='app']/div[1]/div[1]/div[2]/div[1]/div[1]/form/div[3]");
+    public By agregarpreenvio = By.xpath("//div[@id='AsociarPreenvios']/div/form/div[3]/a");
+    public By listapreenviosnoasociados = By.xpath("//div[@id='AsociarPreenvios']");
+    public By regresar = By.xpath("//div[@id='DatosCotizacion']/div/div/form/div[15]/a");
     public By regresarConfi = By.id("ConfirmaAceptada");
-
     public By actualizarcuenta = By.xpath("//a[@class='btn btn-link AbrirPortalAutogestion']");
-
     public By peso = By.xpath("//div[@class='form-group col-md-2 col-xs-12 weight-input no-padding-left']/input");
-
+    public By pesoerrortxt = By.xpath("//div[@class='form-group col-md-2 col-xs-12 weight-input no-padding-left error-input']/input");
     public By btnjudiciales = By.xpath("//div[@class='judicial-notifications modal-container container']/div[1]/div[1]/div[1]/form/div[4]/button");
-
     public By codigoradicado = By.xpath("//input[@placeholder='Ej: 1234']");
     public By btnradicado = By.xpath("//div[@class='rapi-radicado modal-container container']/div[1]/div[1]/div[1]/form/div[6]/button");
-
+    public By cargando = By.id("cargando");
+    public By errorpeso = By.xpath("//div[@id='app']/div[1]/div[1]/div[2]/div[1]/div[1]/form/div[5]");
+    public By errorvalor = By.xpath("//div[@id='app']/div[1]/div[1]/div[2]/div[1]/div[1]/form/div[10]");
+    public By errorpaquete = By.xpath("//div[@id='app']/div[1]/div[1]/div[2]/div[1]/div[1]/form/div[7]");
     static String tiposervicio = "";
+    WebDriverWait tiempo = new WebDriverWait(getDriver(),30);
 
     public void Cotizatuenvio(String dato){
         try{
-            getDriver().findElement(agregarpreenvio).isDisplayed();
-            System.out.println("Se encontraron preenvios para asociar");
-            getDriver().findElement(agregarpreenvio).click();
-            interactorTime.esperaMilis(5000);
-        }catch (NoSuchElementException exception){
+            tiempo.until(
+                    ExpectedConditions.or(
+                            ExpectedConditions.attributeToBe(listapreenviosnoasociados,"class","disassociated-preshippings-container"),
+                            ExpectedConditions.and(
+                                    ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                    ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                            )
+                    )
+            );
+        }catch (Exception e){
+            throw new RuntimeException("No cargo pagina de cotizar preenvio");
         }
-        interactorTime.esperaMilis(10000);
-        System.out.println("Ingresando datos de Cotización");
+        if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
+            getDriver().findElement(agregarpreenvio).click();
+            try{
+                tiempo.until(
+                        ExpectedConditions.and(
+                                ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                        )
+                );
+            }catch (Exception e){
+                throw new RuntimeException("No cargo pagina de cotizar preenvio");
+            }
+        }
         if (dato.equals("carguedatos")){
             getDriver().findElement(cotizacionCiudad).sendKeys("BOGOTA\\CUND\\COL");
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
         }else{
             getDriver().findElement(cotizacionCiudad).sendKeys(DataRandom.Ciudad());
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
         }
-        getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-        getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-        interactorTime.esperaMilis(10000);
         Select drpcotizaciondonde = new Select (getDriver().findElement(cotizaciondonde));
         drpcotizaciondonde.selectByVisibleText(DataRandom.Donde());
-        interactorTime.esperaMilis(5000);
-        Select drpcotizacionTpaquete = new Select (getDriver().findElement(cotizacionTpaquete));
-        drpcotizacionTpaquete.selectByVisibleText(DataRandom.paquete());
-        interactorTime.esperaMilis(5000);
+        interactorTime.esperaMilis(1000);
+        getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+        interactorTime.esperaMilis(1000);
+        getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+        interactorTime.esperaMilis(1000);
+        dataRandom.paquete();
+        getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+        interactorTime.esperaMilis(1000);
         getDriver().findElement(cotizacionContiene).sendKeys("Automatización");
-        interactorTime.esperaMilis(5000);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();  
+        interactorTime.esperaMilis(1000);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("window.scrollBy(0,1000)");
-        interactorTime.esperaMilis(10000);
-        getDriver().findElement(nopagoencasa).click();
         interactorTime.esperaMilis(1000);
         getDriver().findElement(CotizarPreenvio).click();
-        interactorTime.esperaMilis(5000);
+        interactorTime.esperaMilis(1000);
+        while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+            || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+            getDriver().findElement(pesoerrortxt).clear();
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(pesoerrortxt).sendKeys("1");
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            js.executeScript("window.scrollBy(0,1000)");
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(CotizarPreenvio).click();
+            interactorTime.esperaMilis(1000);
+        }
+        while (getDriver().findElement(errorpaquete).getAttribute("class").equals("form-group col-md-3 col-xs-12 no-padding-right error-input")){
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            dataRandom.paquete();
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            js.executeScript("window.scrollBy(0,1000)");
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(CotizarPreenvio).click();
+            interactorTime.esperaMilis(1000);
+        }
+        try {
+            tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
+        }catch (Exception e){
+            throw new RuntimeException("No cargo lista de servicios");
+        }
         try {
             WebElement opcionesServicios = getDriver().findElement(By.
                     xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
             opcionesServicios.click();
         }catch (Exception e){
-            throw new RuntimeException("No se cargó ningún servicio");
+            throw new RuntimeException("No cargo el servicio de Mensajeria Expresa");
         }
     }
 
     public void RegresoCotizaEnvio(){
+        try{
+            tiempo.until(
+                    ExpectedConditions.or(
+                            ExpectedConditions.attributeToBe(listapreenviosnoasociados,"class","disassociated-preshippings-container"),
+                            ExpectedConditions.and(
+                                    ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                    ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                            )
+                    )
+            );
+        }catch (Exception e){
+            throw new RuntimeException("No cargo pagina de cotizar preenvio");
+        }
+        if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
+            getDriver().findElement(agregarpreenvio).click();
+            try{
+                tiempo.until(
+                        ExpectedConditions.and(
+                                ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                        )
+                );
+            }catch (Exception e){
+                throw new RuntimeException("No cargo pagina de cotizar preenvio");
+            }
+        }
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript("window.scrollBy(0,1000)");
-        interactorTime.esperaMilis(5000);
         getDriver().findElement(regresar).click();
         interactorTime.esperaMilis(2000);
         getDriver().findElement(regresarConfi).click();
@@ -105,7 +187,6 @@ public class CotizaciondeenviosPage extends PageObject{
     }
 
     public void actualizarCuenta(){
-        interactorTime.esperaMilis(10000);
         HttpURLConnection http = null;
         String src = "";
         src = getDriver().findElement(actualizarcuenta).getAttribute("href");
@@ -121,7 +202,6 @@ public class CotizaciondeenviosPage extends PageObject{
 
     public void cargueexitosoactulizarcuenta(){
         if (respuesta < 400){
-            System.out.println("El link esta en buenas condiciones" + respuesta);
         }else{
             try {
                 getDriver().findElement(regresar).click();
@@ -133,293 +213,581 @@ public class CotizaciondeenviosPage extends PageObject{
 
     public void pagoencasaactulizocuenta(){
         try{
-            getDriver().findElement(agregarpreenvio).isDisplayed();
-            System.out.println("Se encontraron preenvios para asociar");
-            getDriver().findElement(agregarpreenvio).click();
-            interactorTime.esperaMilis(5000);
-        }catch (NoSuchElementException exception){
+            tiempo.until(
+                    ExpectedConditions.or(
+                            ExpectedConditions.attributeToBe(listapreenviosnoasociados,"class","disassociated-preshippings-container"),
+                            ExpectedConditions.and(
+                                    ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                    ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                            )
+                    )
+            );
+        }catch (Exception e){
+            throw new RuntimeException("No cargo pagina de cotizar preenvio");
         }
-        interactorTime.esperaMilis(10000);
+        if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
+            getDriver().findElement(agregarpreenvio).click();
+            try{
+                tiempo.until(
+                        ExpectedConditions.and(
+                                ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                        )
+                );
+            }catch (Exception e){
+                throw new RuntimeException("No cargo pagina de cotizar preenvio");
+            }
+        }
         getDriver().findElement(cotizacionCiudad).sendKeys(DataRandom.Ciudad());
         getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
         getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-        interactorTime.esperaMilis(10000);
-        Select drpcotizaciondonde = new Select (getDriver().findElement(cotizaciondonde));
-        drpcotizaciondonde.selectByVisibleText(DataRandom.Donde());
-        interactorTime.esperaMilis(5000);
-        Select drpcotizacionTpaquete = new Select (getDriver().findElement(cotizacionTpaquete));
-        drpcotizacionTpaquete.selectByVisibleText(DataRandom.paquete());
-        interactorTime.esperaMilis(5000);
-        getDriver().findElement(cotizacionContiene).sendKeys("EnvioPagoEnCasa");
-        interactorTime.esperaMilis(5000);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollBy(0,1000)");
-        interactorTime.esperaMilis(10000);
-        try {
-            getDriver().findElement(pagoencasa).click();
-        }catch (Exception e){
-            throw new RuntimeException("Opcion pago en casa no esta habilitada");
-        }
-        interactorTime.esperaMilis(2000);
-        getDriver().findElement(CotizarPreenvio).click();
-        interactorTime.esperaMilis(10000);
-    }
-
-    public void CotizatuenvioCsv(){
-        interactorTime.esperaMilis(5000);
-        try{
-            getDriver().findElement(agregarpreenvio).isDisplayed();
-            System.out.println("Se encontraron preenvios para asociar");
-            getDriver().findElement(agregarpreenvio).click();
-            interactorTime.esperaMilis(5000);
-        }catch (NoSuchElementException exception){
-        }
-        interactorTime.esperaMilis(10000);
-        getDriver().findElement(cotizacionCiudad).sendKeys(DataCvs.ciudaddes2());
-        getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-        getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-        interactorTime.esperaMilis(10000);
-        Select drpcotizaciondonde = new Select (getDriver().findElement(cotizaciondonde));
-        drpcotizaciondonde.selectByVisibleText(DataCvs.destino2());
-        interactorTime.esperaMilis(5000);
-        Select drpcotizacionTpaquete = new Select (getDriver().findElement(cotizacionTpaquete));
-        drpcotizacionTpaquete.selectByVisibleText(DataCvs.tipopq2());
-        interactorTime.esperaMilis(5000);
-        getDriver().findElement(cotizacionContiene).sendKeys(DataCvs.contenido2());
-        interactorTime.esperaMilis(5000);
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("window.scrollBy(0,1000)");
-        interactorTime.esperaMilis(10000);
-        getDriver().findElement(nopagoencasa).click();
         interactorTime.esperaMilis(1000);
-        getDriver().findElement(CotizarPreenvio).click();
-        interactorTime.esperaMilis(5000);
-        try {
-            WebElement opcionesServicios = getDriver().findElement(By.
-                    xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
-            opcionesServicios.click();
-        }catch (Exception e){
-            throw new RuntimeException("No se cargó ningún servicio");
-        }
-    }
-
-    public void CotizatuenvioAfectacion(String Envio){
-        if (Envio.equals("Contado")){
-            try{
-                getDriver().findElement(agregarpreenvio).isDisplayed();
-                System.out.println("Se encontraron preenvios para asociar");
-                getDriver().findElement(agregarpreenvio).click();
-                interactorTime.esperaMilis(5000);
-            }catch (NoSuchElementException exception){
-            }
-            interactorTime.esperaMilis(10000);
-            getDriver().findElement(cotizacionCiudad).sendKeys(DataRandom.Ciudad());
-            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(10000);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ENTER);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ARROW_DOWN);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ARROW_DOWN);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ENTER);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(5000);
-            Select drpcotizacionTpaquete = new Select (getDriver().findElement(cotizacionTpaquete));
-            drpcotizacionTpaquete.selectByVisibleText(DataRandom.paquete());
-            interactorTime.esperaMilis(5000);
-            getDriver().findElement(cotizacionContiene).sendKeys("EnvioDeContado");
-            interactorTime.esperaMilis(5000);
-            JavascriptExecutor js = (JavascriptExecutor) getDriver();
-            js.executeScript("window.scrollBy(0,1000)");
-            interactorTime.esperaMilis(10000);
-            getDriver().findElement(nopagoencasa).click();
+        if (getDriver().findElement(nopagoencasa).getAttribute("class").equals("selected")){
+            RegresoCotizaEnvio();
+            listadoTusRecogidas.AgregarPreenvio();
+            pagoencasaactulizocuenta();
+        }else{
+            Select drpcotizaciondonde = new Select (getDriver().findElement(cotizaciondonde));
+            drpcotizaciondonde.selectByVisibleText(DataRandom.Donde());
             interactorTime.esperaMilis(1000);
-            getDriver().findElement(CotizarPreenvio).click();
-            interactorTime.esperaMilis(5000);
-            WebElement opcionesServicios = getDriver().findElement(By.
-                    xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Notificaciones Judiciales']"));
-            opcionesServicios.click();
-            tiposervicio = "Notificaciones";
-            interactorTime.esperaMilis(1000);
-            getDriver().findElement(btnjudiciales).click();
-            /*serviciosRandom.contarservicios();
-            if(ServiciosRandom.servicio().equals("Notificaciones Judiciales")){
-                interactorTime.esperaMilis(1000);
-                getDriver().findElement(btnjudiciales).click();
-            }
-            if(ServiciosRandom.servicio().equals("Radicado")){
-                interactorTime.esperaMilis(1000);
-                getDriver().findElement(codigoradicado).sendKeys("123");
-                getDriver().findElement(btnradicado).click();
-            }*/
-        }
-        if (Envio.equals("PagoEnCasa")){
-            try{
-                getDriver().findElement(agregarpreenvio).isDisplayed();
-                System.out.println("Se encontraron preenvios para asociar");
-                getDriver().findElement(agregarpreenvio).click();
-                interactorTime.esperaMilis(5000);
-            }catch (NoSuchElementException exception){
-            }
-            interactorTime.esperaMilis(10000);
-            getDriver().findElement(cotizacionCiudad).sendKeys(DataRandom.Ciudad());
-            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(10000);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ENTER);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ARROW_DOWN);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ARROW_DOWN);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ENTER);
             getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(5000);
-            Select drpcotizacionTpaquete = new Select (getDriver().findElement(cotizacionTpaquete));
-            drpcotizacionTpaquete.selectByVisibleText(DataRandom.paquete());
-            interactorTime.esperaMilis(5000);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            dataRandom.paquete();
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
             getDriver().findElement(cotizacionContiene).sendKeys("EnvioPagoEnCasa");
-            interactorTime.esperaMilis(5000);
+            interactorTime.esperaMilis(1000);
             JavascriptExecutor js = (JavascriptExecutor) getDriver();
             js.executeScript("window.scrollBy(0,1000)");
-            interactorTime.esperaMilis(10000);
+            interactorTime.esperaMilis(1000);
             try {
                 getDriver().findElement(pagoencasa).click();
             }catch (Exception e){
                 throw new RuntimeException("Opcion pago en casa no esta habilitada");
             }
-            interactorTime.esperaMilis(2000);
+            interactorTime.esperaMilis(1000);
             getDriver().findElement(CotizarPreenvio).click();
-            interactorTime.esperaMilis(20000);
+            interactorTime.esperaMilis(1000);
+            while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+                    || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+                getDriver().findElement(pesoerrortxt).clear();
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys("1");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
+            while (getDriver().findElement(errorpaquete).getAttribute("class").equals("form-group col-md-3 col-xs-12 no-padding-right error-input")){
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                dataRandom.paquete();
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
             try {
-                getDriver().findElement(confirmarCuenta).click();
+                tiempo.until(ExpectedConditions.attributeToBe(By.id("ConfirmarValorComercialPagoEnCasa"),"class","confirm-commercial-value-container"));
+                interactorTime.esperaMilis(1000);
             }catch (Exception e){
-                throw new RuntimeException("No se ha cargado la cuenta");
+                throw new RuntimeException("No cargo pop up informacion de cuenta bancaria");
             }
-            interactorTime.esperaMilis(5000);
-            WebElement opcionesServicios = getDriver().findElement(By.
-                    xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería']"));
-            opcionesServicios.click();
-            tiposervicio = "Mensajería";
-            /*serviciosRandom.contarservicios();
-            if(ServiciosRandom.servicio().equals("Notificaciones")){
-                interactorTime.esperaMilis(1000);
-                getDriver().findElement(btnjudiciales).click();
-            }
-            if(ServiciosRandom.servicio().equals("Rapi Radicado")){
-                interactorTime.esperaMilis(1000);
-                getDriver().findElement(codigoradicado).sendKeys("123");
-                getDriver().findElement(btnradicado).click();
-            }*/
         }
-        if (Envio.equals("AlCobro")){
+    }
+
+    public void CotizatuenvioCsv(){
+        try{
+            tiempo.until(
+                    ExpectedConditions.or(
+                            ExpectedConditions.attributeToBe(listapreenviosnoasociados,"class","disassociated-preshippings-container"),
+                            ExpectedConditions.and(
+                                    ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                    ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                            )
+                    )
+            );
+        }catch (Exception e){
+            throw new RuntimeException("No cargo pagina de cotizar preenvio");
+        }
+        if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
+            getDriver().findElement(agregarpreenvio).click();
             try{
-                getDriver().findElement(agregarpreenvio).isDisplayed();
-                System.out.println("Se encontraron preenvios para asociar");
-                getDriver().findElement(agregarpreenvio).click();
-                interactorTime.esperaMilis(5000);
-            }catch (NoSuchElementException exception){
+                tiempo.until(
+                        ExpectedConditions.and(
+                                ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                        )
+                );
+            }catch (Exception e){
+                throw new RuntimeException("No cargo pagina de cotizar preenvio");
             }
-            interactorTime.esperaMilis(10000);
+        }
+        getDriver().findElement(cotizacionCiudad).sendKeys(DataCvs.ciudaddes2());
+        getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+        getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+        interactorTime.esperaMilis(1000);
+        Select drpcotizaciondonde = new Select (getDriver().findElement(cotizaciondonde));
+        drpcotizaciondonde.selectByVisibleText(DataCvs.destino2());
+        interactorTime.esperaMilis(1000);
+        getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+        interactorTime.esperaMilis(1000);
+        getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+        interactorTime.esperaMilis(1000);
+        switch (DataCvs.tipopq2()){
+            case "PAQUETE PEQUEÑO":{
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                break;
+            }
+            case "SOBRE CARTA":{
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                break;
+            }
+            case "SOBRE MANILA":{
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                break;
+            }
+            case "TULA":{
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                break;
+            }
+        }
+        getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+        interactorTime.esperaMilis(1000);
+        getDriver().findElement(cotizacionContiene).sendKeys(DataCvs.contenido2());
+        interactorTime.esperaMilis(1000);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("window.scrollBy(0,1000)");
+        interactorTime.esperaMilis(1000);
+        getDriver().findElement(CotizarPreenvio).click();
+        interactorTime.esperaMilis(1000);
+        while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+                || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+            getDriver().findElement(pesoerrortxt).clear();
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(pesoerrortxt).sendKeys("1");
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            js.executeScript("window.scrollBy(0,1000)");
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(CotizarPreenvio).click();
+            interactorTime.esperaMilis(1000);
+        }
+        try {
+            tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
+        }catch (Exception e){
+            throw new RuntimeException("No cargo lista de servicios");
+        }
+        try {
+            WebElement opcionesServicios = getDriver().findElement(By.
+                    xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
+            opcionesServicios.click();
+        }catch (Exception e){
+            throw new RuntimeException("No cargo el servicio de Mensajeria Expresa");
+        }
+    }
+
+    public void CotizatuenvioAfectacion(String Envio){
+        try{
+            tiempo.until(
+                    ExpectedConditions.or(
+                            ExpectedConditions.attributeToBe(listapreenviosnoasociados,"class","disassociated-preshippings-container"),
+                            ExpectedConditions.and(
+                                    ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                    ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                            )
+                    )
+            );
+        }catch (Exception e){
+            throw new RuntimeException("No cargo pagina de cotizar preenvio");
+        }
+        if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
+            getDriver().findElement(agregarpreenvio).click();
+            try{
+                tiempo.until(
+                        ExpectedConditions.and(
+                                ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                        )
+                );
+            }catch (Exception e){
+                throw new RuntimeException("No cargo pagina de cotizar preenvio");
+            }
+        }
+        if (Envio.equals("Contado")){
             getDriver().findElement(cotizacionCiudad).sendKeys(DataRandom.Ciudad());
             getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
             getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(10000);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ENTER);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ARROW_DOWN);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ARROW_DOWN);
-            getDriver().findElement(cotizaciondonde).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            Select drpcotizaciondonde = new Select (getDriver().findElement(cotizaciondonde));
+            drpcotizaciondonde.selectByVisibleText(DataRandom.Donde());
+            interactorTime.esperaMilis(1000);
             getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(5000);
-            Select drpcotizacionTpaquete = new Select (getDriver().findElement(cotizacionTpaquete));
-            drpcotizacionTpaquete.selectByVisibleText(DataRandom.paquete());
-            interactorTime.esperaMilis(5000);
-            getDriver().findElement(cotizacionContiene).sendKeys("EnvioAlCobro");
-            interactorTime.esperaMilis(5000);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            dataRandom.paquete();
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionContiene).sendKeys("EnvioDeContado");
+            interactorTime.esperaMilis(1000);
             JavascriptExecutor js = (JavascriptExecutor) getDriver();
             js.executeScript("window.scrollBy(0,1000)");
-            interactorTime.esperaMilis(10000);
-            try {
-                getDriver().findElement(alcontado).click();
-            }catch (Exception e){
-                throw new RuntimeException("Opcion  al cobro no esta habilitada");
-            }
-            interactorTime.esperaMilis(2000);
+            interactorTime.esperaMilis(1000);
             getDriver().findElement(CotizarPreenvio).click();
-            interactorTime.esperaMilis(20000);
-            WebElement opcionesServicios = getDriver().findElement(By.
-                    xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
-            opcionesServicios.click();
-            tiposervicio = "Mensajería";
-            /*serviciosRandom.contarservicios();
-            if(ServiciosRandom.servicio().equals("Notificaciones Judiciales")){
+            interactorTime.esperaMilis(1000);
+            while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+                    || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+                getDriver().findElement(pesoerrortxt).clear();
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys("1");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
+            while (getDriver().findElement(errorpaquete).getAttribute("class").equals("form-group col-md-3 col-xs-12 no-padding-right error-input")){
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                dataRandom.paquete();
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
+            try {
+                tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
+            }catch (Exception e){
+                throw new RuntimeException("No cargo lista de servicios");
+            }
+            try {
+                WebElement opcionesServicios = getDriver().findElement(By.
+                        xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Notificaciones Judiciales']"));
+                opcionesServicios.click();
+                tiposervicio = "Notificaciones";
                 interactorTime.esperaMilis(1000);
                 getDriver().findElement(btnjudiciales).click();
+            }catch (Exception e){
+                throw new RuntimeException("No cargo el servicio de Notificaciones Jusiciales");
             }
-            if(ServiciosRandom.servicio().equals("Radicado")){
+        }
+        if (Envio.equals("PagoEnCasa")){
+            getDriver().findElement(cotizacionCiudad).sendKeys(DataRandom.Ciudad());
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
+            if (getDriver().findElement(pagoencasadeshabilitado).getAttribute("class").equals("form-group col-xs-12 col-md-8 no-padding-left hide")){
+                RegresoCotizaEnvio();
+                listadoTusRecogidas.AgregarPreenvio();
+                CotizatuenvioAfectacion("PagoEnCasa");
+            }else{
+                Select drpcotizaciondonde = new Select (getDriver().findElement(cotizaciondonde));
+                drpcotizaciondonde.selectByVisibleText(DataRandom.Donde());
                 interactorTime.esperaMilis(1000);
-                getDriver().findElement(codigoradicado).sendKeys("123");
-                getDriver().findElement(btnradicado).click();
-            }*/
+                getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                dataRandom.paquete();
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionContiene).sendKeys("EnvioPagoEnCasa");
+                interactorTime.esperaMilis(1000);
+                JavascriptExecutor js = (JavascriptExecutor) getDriver();
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pagoencasa).click();
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+                while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+                        || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+                    getDriver().findElement(pesoerrortxt).clear();
+                    interactorTime.esperaMilis(1000);
+                    getDriver().findElement(pesoerrortxt).sendKeys("1");
+                    interactorTime.esperaMilis(1000);
+                    getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+                    interactorTime.esperaMilis(1000);
+                    getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+                    interactorTime.esperaMilis(1000);
+                    getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                    interactorTime.esperaMilis(1000);
+                    getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                    interactorTime.esperaMilis(1000);
+                    getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                    interactorTime.esperaMilis(1000);
+                    js.executeScript("window.scrollBy(0,1000)");
+                    interactorTime.esperaMilis(1000);
+                    getDriver().findElement(CotizarPreenvio).click();
+                    interactorTime.esperaMilis(1000);
+                }
+                while (getDriver().findElement(errorpaquete).getAttribute("class").equals("form-group col-md-3 col-xs-12 no-padding-right error-input")){
+                    getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                    interactorTime.esperaMilis(1000);
+                    dataRandom.paquete();
+                    getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                    interactorTime.esperaMilis(1000);
+                    js.executeScript("window.scrollBy(0,1000)");
+                    interactorTime.esperaMilis(1000);
+                    getDriver().findElement(CotizarPreenvio).click();
+                    interactorTime.esperaMilis(1000);
+                }
+                try {
+                    tiempo.until(ExpectedConditions.attributeToBe(By.id("ConfirmarValorComercialPagoEnCasa"),"class","confirm-commercial-value-container"));
+                }catch (Exception e){
+                    throw new RuntimeException("No cargo pop up informacion de cuenta bancaria");
+                }
+                getDriver().findElement(confirmarCuenta).click();
+                try {
+                    tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
+                }catch (Exception e){
+                    throw new RuntimeException("No cargo lista de servicios");
+                }
+                try {
+                    WebElement opcionesServicios = getDriver().findElement(By.
+                            xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería']"));
+                    opcionesServicios.click();
+                    tiposervicio = "Mensajería";
+                }catch (Exception e){
+                    throw new RuntimeException("No cargo el servicio de Mensajeria");
+                }
+            }
+        }
+        if (Envio.equals("AlCobro")){
+            getDriver().findElement(cotizacionCiudad).sendKeys(DataRandom.Ciudad());
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
+            Select drpcotizaciondonde = new Select (getDriver().findElement(cotizaciondonde));
+            drpcotizaciondonde.selectByVisibleText(DataRandom.Donde());
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            dataRandom.paquete();
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionContiene).sendKeys("EnvioAlCobro");
+            interactorTime.esperaMilis(1000);
+            JavascriptExecutor js = (JavascriptExecutor) getDriver();
+            js.executeScript("window.scrollBy(0,1000)");
+            interactorTime.esperaMilis(1000);
+            try {
+                getDriver().findElement(alcontado).click();
+            }catch (NoSuchElementException exception){
+                RegresoCotizaEnvio();
+                listadoTusRecogidas.AgregarPreenvio();
+                CotizatuenvioAfectacion("AlCobro");
+            }
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(CotizarPreenvio).click();
+            interactorTime.esperaMilis(1000);
+            while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+                    || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+                getDriver().findElement(pesoerrortxt).clear();
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys("1");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
+            while (getDriver().findElement(errorpaquete).getAttribute("class").equals("form-group col-md-3 col-xs-12 no-padding-right error-input")){
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                dataRandom.paquete();
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
+            try {
+                tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
+            }catch (Exception e){
+                throw new RuntimeException("No cargo lista de servicios");
+            }
+            try {
+                WebElement opcionesServicios = getDriver().findElement(By.
+                        xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
+                opcionesServicios.click();
+                tiposervicio = "Mensajería";
+            }catch (Exception e){
+                throw new RuntimeException("No cargo el servicio de Mensajeria Expresa");
+            }
         }
         if (Envio.equals("Convenio")){
-            try{
-                getDriver().findElement(agregarpreenvio).isDisplayed();
-                System.out.println("Se encontraron preenvios para asociar");
-                getDriver().findElement(agregarpreenvio).click();
-                interactorTime.esperaMilis(5000);
-            }catch (NoSuchElementException exception){
-            }
-            interactorTime.esperaMilis(10000);
             getDriver().findElement(cotizacionCiudad).sendKeys("BOGOTA\\CUND\\COL");
             getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
             getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(20000);
+            interactorTime.esperaMilis(1000);
             getDriver().findElement(clientecorporativo).click();
-            interactorTime.esperaMilis(5000);
+            tiempo.until(ExpectedConditions.elementToBeClickable(convenio));
             if (DatosPersonalesPage.ambiente().equals("QA")){
                 getDriver().findElement(convenio).sendKeys("2681");
-                interactorTime.esperaMilis(5000);
-            }else {
-                getDriver().findElement(convenio).sendKeys("2678");
-                interactorTime.esperaMilis(5000);
+                tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
+            }else if (DatosPersonalesPage.ambiente().equals("Apitesting")){
+                getDriver().findElement(convenio).sendKeys("10553");
+                tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
             }
-            Select drpcotizacionTpaquete = new Select (getDriver().findElement(cotizacionTpaquete));
-            drpcotizacionTpaquete.selectByVisibleText(DataRandom.paquete());
-            interactorTime.esperaMilis(5000);
+            getDriver().findElement(peso).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
+            dataRandom.paquete();
+            getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+            interactorTime.esperaMilis(1000);
             getDriver().findElement(cotizacionContiene).sendKeys("EnvioConvenio");
-            interactorTime.esperaMilis(5000);
+            interactorTime.esperaMilis(1000);
             JavascriptExecutor js = (JavascriptExecutor) getDriver();
             js.executeScript("window.scrollBy(0,1000)");
-            interactorTime.esperaMilis(10000);
+            interactorTime.esperaMilis(1000);
             getDriver().findElement(CotizarPreenvio).click();
-            interactorTime.esperaMilis(10000);
-            WebElement opcionesServicios = getDriver().findElement(By.
-                    xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
-            opcionesServicios.click();
-            tiposervicio = "Mensajería";
-            /*serviciosRandom.contarservicios();
-            if(ServiciosRandom.servicio().equals("Notificaciones Judiciales")){
+            interactorTime.esperaMilis(1000);
+            while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+                    || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+                getDriver().findElement(pesoerrortxt).clear();
                 interactorTime.esperaMilis(1000);
-                getDriver().findElement(btnjudiciales).click();
+                getDriver().findElement(pesoerrortxt).sendKeys("1");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
             }
-            if(ServiciosRandom.servicio().equals("Radicado")){
+            while (getDriver().findElement(errorpaquete).getAttribute("class").equals("form-group col-md-3 col-xs-12 no-padding-right error-input")){
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
                 interactorTime.esperaMilis(1000);
-                getDriver().findElement(codigoradicado).sendKeys("123");
-                getDriver().findElement(btnradicado).click();
-            }*/
+                dataRandom.paquete();
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
+            if (getDriver().findElement(errorconvenio).getAttribute("class").equals("form-group col-md-3 col-xs-12 customer-agreement no-padding-right error-input")){
+                try{
+                    fail("El codigo de convenio esta errado");
+                }catch (final RuntimeException e){
+                    assertTrue(true);
+                }
+            }
+            try {
+                tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
+            }catch (Exception e){
+                throw new RuntimeException("No cargo lista de servicios");
+            }
+            try {
+                WebElement opcionesServicios = getDriver().findElement(By.
+                        xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
+                opcionesServicios.click();
+                tiposervicio = "Mensajería";
+            }catch (Exception e){
+                throw new RuntimeException("No cargo el servicio de Mensajeria Expresa");
+            }
         }
     }
     public void CotizatuenvioAPP(String Envio,String Cedula){
-        if (Envio.equals("Contado")){
+        try{
+            tiempo.until(
+                    ExpectedConditions.or(
+                            ExpectedConditions.attributeToBe(listapreenviosnoasociados,"class","disassociated-preshippings-container"),
+                            ExpectedConditions.and(
+                                    ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                    ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                            )
+                    )
+            );
+        }catch (Exception e){
+            throw new RuntimeException("No cargo pagina de cotizar preenvio");
+        }
+        if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
+            getDriver().findElement(agregarpreenvio).click();
             try{
-                getDriver().findElement(agregarpreenvio).isDisplayed();
-                System.out.println("Se encontraron preenvios para asociar");
-                getDriver().findElement(agregarpreenvio).click();
-                interactorTime.esperaMilis(5000);
-            }catch (NoSuchElementException exception){
+                tiempo.until(
+                        ExpectedConditions.and(
+                                ExpectedConditions.attributeToBe(cargando,"hidden","true"),
+                                ExpectedConditions.elementToBeClickable(cotizacionCiudad)
+                        )
+                );
+            }catch (Exception e){
+                throw new RuntimeException("No cargo pagina de cotizar preenvio");
             }
-            interactorTime.esperaMilis(10000);
+        }
+        if (Envio.equals("Contado")){
             getDriver().findElement(cotizacionCiudad).sendKeys(DataRandom.CiudadAPP());
-            interactorTime.esperaMilis(1000);
             getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(4000);
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
             if (Cedula.equals("1024567308")){
                 getDriver().findElement(peso).sendKeys("15");
                 interactorTime.esperaMilis(1000);
@@ -465,10 +833,34 @@ public class CotizaciondeenviosPage extends PageObject{
             JavascriptExecutor js = (JavascriptExecutor) getDriver();
             js.executeScript("window.scrollBy(0,1000)");
             interactorTime.esperaMilis(1000);
-            getDriver().findElement(nopagoencasa).click();
-            interactorTime.esperaMilis(1000);
             getDriver().findElement(CotizarPreenvio).click();
-            interactorTime.esperaMilis(5000);
+            interactorTime.esperaMilis(1000);
+            while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+                    || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+                getDriver().findElement(pesoerrortxt).clear();
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys("1");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
+            try {
+                tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
+            }catch (Exception e){
+                throw new RuntimeException("No cargo lista de servicios");
+            }
             try {
                 if (Cedula.equals("1024567308")){
                     WebElement opcionesServicios = getDriver().findElement(By.
@@ -488,18 +880,10 @@ public class CotizaciondeenviosPage extends PageObject{
             }
         }
         if (Envio.equals("PagoEnCasa")){
-            try{
-                getDriver().findElement(agregarpreenvio).isDisplayed();
-                System.out.println("Se encontraron preenvios para asociar");
-                getDriver().findElement(agregarpreenvio).click();
-                interactorTime.esperaMilis(5000);
-            }catch (NoSuchElementException exception){
-            }
-            interactorTime.esperaMilis(10000);
             getDriver().findElement(cotizacionCiudad).sendKeys(DataRandom.CiudadAPP());
-            interactorTime.esperaMilis(1000);
             getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(4000);
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
             if (Cedula.equals("1024567208")){
                 getDriver().findElement(peso).sendKeys("15");
                 interactorTime.esperaMilis(1000);
@@ -550,15 +934,41 @@ public class CotizaciondeenviosPage extends PageObject{
             }catch (Exception e){
                 throw new RuntimeException("Opcion pago en casa no esta habilitada");
             }
-            interactorTime.esperaMilis(2000);
+            interactorTime.esperaMilis(1000);
             getDriver().findElement(CotizarPreenvio).click();
-            interactorTime.esperaMilis(20000);
+            interactorTime.esperaMilis(1000);
+            while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+                    || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+                getDriver().findElement(pesoerrortxt).clear();
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys("1");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
             try {
+                tiempo.until(ExpectedConditions.attributeToBe(By.id("ConfirmarValorComercialPagoEnCasa"),"class","confirm-commercial-value-container"));
                 getDriver().findElement(confirmarCuenta).click();
             }catch (Exception e){
-                throw new RuntimeException("No se ha cargado la cuenta");
+                throw new RuntimeException("No cargo pop up informacion de cuenta bancaria");
             }
-            interactorTime.esperaMilis(7000);
+            try {
+                tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
+            }catch (Exception e){
+                throw new RuntimeException("No cargo lista de servicios");
+            }
             try {
                 if (Cedula.equals("1024567208")){
                     WebElement opcionesServicios = getDriver().findElement(By.
@@ -578,18 +988,10 @@ public class CotizaciondeenviosPage extends PageObject{
             }
         }
         if (Envio.equals("AlCobro")){
-            try{
-                getDriver().findElement(agregarpreenvio).isDisplayed();
-                System.out.println("Se encontraron preenvios para asociar");
-                getDriver().findElement(agregarpreenvio).click();
-                interactorTime.esperaMilis(5000);
-            }catch (NoSuchElementException exception){
-            }
-            interactorTime.esperaMilis(10000);
             getDriver().findElement(cotizacionCiudad).sendKeys(DataRandom.CiudadAPP());
-            interactorTime.esperaMilis(1000);
             getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(4000);
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
             if (Cedula.equals("900456789")){
                 getDriver().findElement(peso).sendKeys("15");
                 interactorTime.esperaMilis(1000);
@@ -637,12 +1039,40 @@ public class CotizaciondeenviosPage extends PageObject{
             interactorTime.esperaMilis(1000);
             try {
                 getDriver().findElement(alcontado).click();
-            }catch (Exception e){
-                throw new RuntimeException("Opcion  al cobro no esta habilitada");
+            }catch (NoSuchElementException exception){
+                RegresoCotizaEnvio();
+                listadoTusRecogidas.AgregarPreenvio();
+                CotizatuenvioAfectacion("AlCobro");
             }
             interactorTime.esperaMilis(2000);
             getDriver().findElement(CotizarPreenvio).click();
-            interactorTime.esperaMilis(20000);
+            interactorTime.esperaMilis(1000);
+            while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+                    || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+                getDriver().findElement(pesoerrortxt).clear();
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys("1");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizaciondonde).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
+            try {
+                tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
+            }catch (Exception e){
+                throw new RuntimeException("No cargo lista de servicios");
+            }
             try {
                 if (Cedula.equals("900456789")){
                     WebElement opcionesServicios = getDriver().findElement(By.
@@ -661,26 +1091,18 @@ public class CotizaciondeenviosPage extends PageObject{
             }
         }
         if (Envio.equals("Convenio")){
-            try{
-                getDriver().findElement(agregarpreenvio).isDisplayed();
-                System.out.println("Se encontraron preenvios para asociar");
-                getDriver().findElement(agregarpreenvio).click();
-                interactorTime.esperaMilis(5000);
-            }catch (NoSuchElementException exception){
-            }
-            interactorTime.esperaMilis(10000);
             getDriver().findElement(cotizacionCiudad).sendKeys("BOGOTA\\CUND\\COL");
-            interactorTime.esperaMilis(1000);
             getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
-            interactorTime.esperaMilis(4000);
+            getDriver().findElement(cotizacionCiudad).sendKeys(Keys.TAB);
+            interactorTime.esperaMilis(1000);
             getDriver().findElement(clientecorporativo).click();
-            interactorTime.esperaMilis(5000);
+            tiempo.until(ExpectedConditions.elementToBeClickable(convenio));
             if (DatosPersonalesPage.ambiente().equals("QA")){
                 getDriver().findElement(convenio).sendKeys("2681");
-                interactorTime.esperaMilis(5000);
-            }else {
-                getDriver().findElement(convenio).sendKeys("2678");
-                interactorTime.esperaMilis(5000);
+                tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
+            }else if (DatosPersonalesPage.ambiente().equals("Apitesting")){
+                getDriver().findElement(convenio).sendKeys("10553");
+                tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
             }
             getDriver().findElement(peso).sendKeys(Keys.TAB);
             interactorTime.esperaMilis(1000);
@@ -698,19 +1120,45 @@ public class CotizaciondeenviosPage extends PageObject{
             js.executeScript("window.scrollBy(0,1000)");
             interactorTime.esperaMilis(1000);
             getDriver().findElement(CotizarPreenvio).click();
-            interactorTime.esperaMilis(10000);
-            try{
+            interactorTime.esperaMilis(1000);
+            while ((getDriver().findElement(errorpeso).getAttribute("class").equals("form-group col-md-2 col-xs-12 weight-input no-padding-left error-input"))
+                    || (getDriver().findElement(errorvalor).getAttribute("class").equals("form-group col-md-3 col-xs-12 value-input no-padding-right error-input"))){
+                getDriver().findElement(pesoerrortxt).clear();
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys("1");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(pesoerrortxt).sendKeys(Keys.TAB);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ARROW_DOWN);
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(cotizacionTpaquete).sendKeys(Keys.ENTER);
+                interactorTime.esperaMilis(1000);
+                js.executeScript("window.scrollBy(0,1000)");
+                interactorTime.esperaMilis(1000);
+                getDriver().findElement(CotizarPreenvio).click();
+                interactorTime.esperaMilis(1000);
+            }
+            if (getDriver().findElement(errorconvenio).getAttribute("class").equals("form-group col-md-3 col-xs-12 customer-agreement no-padding-right error-input")){
+                try{
+                    fail("El codigo de convenio esta errado");
+                }catch (final RuntimeException e){
+                    assertTrue(true);
+                }
+            }
+            try {
+                tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
+            }catch (Exception e){
+                throw new RuntimeException("No cargo lista de servicios");
+            }
+            try {
                 WebElement opcionesServicios = getDriver().findElement(By.
                         xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
                 opcionesServicios.click();
             }catch (Exception e){
-                throw new RuntimeException("Código de convenio no existe o está errado");
+                throw new RuntimeException("No se cargó servicio Mensajeria Expresa");
             }
         }
     }
-
-    public static String servicio(){
-        return tiposervicio;
-    }
-
 }

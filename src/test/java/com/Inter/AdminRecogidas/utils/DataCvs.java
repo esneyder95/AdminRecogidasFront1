@@ -4,7 +4,6 @@ import com.Inter.AdminRecogidas.pageObjects.PantallaconfirmacionPage;
 import com.Inter.AdminRecogidas.pageObjects.PreenvioExitoso;
 import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
-
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -13,17 +12,12 @@ import java.io.IOException;
 public class DataCvs {
     static String CSV_RECO_PATH_OUT = "src/archivosCVS/TestDataRecogidasOut.csv";
     static String CSV_RECO_PATH = "src/archivosCVS/TestDataRecogidas.csv";
-
     static String CSV_PREE_PATH_OUT = "src/archivosCVS/TestDataPreenviosOut.csv";
-
     static String CSV_PREE_POS_OUT = "src/archivosCVS/DataPruebasPosOut.csv";
     static String CSV_PREE_AFECTACION_OUT = "src/archivosCVS/DataPruebasAfectacionOut.csv";
     static String CSV_PREE_PATH = "src/archivosCVS/TestDataPreenvios.csv";
-
     static String CSV_APP_PATH = "src/archivosCVS/DatosPreenvio.csv";
     private static CSVReader csvReader;
-    //private static CSVParser csvReader;
-    private static BufferedWriter cvsWriter;
     static String[] csvCell;
 
     static String cedula,celular,nombre,correo,ciudad,direccion,complemento,ciudaddes,destino,tipopq,contenido,
@@ -173,7 +167,6 @@ public class DataCvs {
                     CSVWriter.NO_QUOTE_CHARACTER,
                     CSVWriter.DEFAULT_ESCAPE_CHARACTER,
                     CSVWriter.DEFAULT_LINE_END);
-            //fwrite.write('\ufeff');
             String[] headerRecord = {"DocumentoRemitente", "NombreRemitente","CelularRemitente","NumeroRecogida"};
             writer.writeNext(headerRecord);
             writer.writeAll(PantallaconfirmacionPage.outCsv());

@@ -2,10 +2,14 @@
 Feature: Crear Recogidas + Crear preenvio archivos CVS
 
   @Formulario_CVS_POS
-  Scenario: Crear preenvios para pruebas POS
-    Given Usuario ingresa a tus recogidas
+  Scenario Outline: Crear preenvios para pruebas POS
+    Given Usuario ingresa a tus recogidas <Cedula> <Celular>
     When  Ingreso los diferentes preenvios
     Then  Creo data pruebas POS
+
+    Examples:
+      |    Cedula|   Celular|
+      |1024567308|3005761988|
 
   @Formulario_CVS_APP
  Scenario Outline: Crear preenvios para pruebas de APP

@@ -6,7 +6,6 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.opencsv.exceptions.CsvValidationException;
 import net.thucydides.core.annotations.Step;
 import com.Inter.AdminRecogidas.utils.DataCvs;
-
 import java.io.IOException;
 
 
@@ -16,13 +15,9 @@ public class CvsSteps {
     DataCvs dataCvs = new DataCvs();
     PantallaconfirmacionPage pantallaconfirmacionPage = new PantallaconfirmacionPage();
     DatosRecogidaPage datosRecogidaPage = new DatosRecogidaPage();
-
     CotizaciondeenviosPage cotizaciondeenviosPage = new CotizaciondeenviosPage();
-
     DatosDestinatario datosDestinatario = new DatosDestinatario();
-
     PreenvioExitoso preenvioExitoso = new PreenvioExitoso();
-    PreenviosSteps preenviosSteps = new PreenviosSteps();
 
     @Step
     public void determinodata(String Dato) throws CsvValidationException, IOException {

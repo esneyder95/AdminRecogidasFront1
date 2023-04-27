@@ -1,7 +1,6 @@
 package com.Inter.AdminRecogidas.Runner;
 
 import io.cucumber.junit.CucumberOptions;
-import io.cucumber.junit.CucumberOptions.SnippetType;
 import net.serenitybdd.cucumber.CucumberWithSerenity;
 import org.junit.runner.RunWith;
 
@@ -10,7 +9,7 @@ import org.junit.runner.RunWith;
         plugin = {"pretty" }
         ,features="src/test/resources/features"
         ,glue="com.Inter.AdminRecogidas"
-        ,tags = "@PruebasAfectacion"
+        ,tags = "@PruebasRegresion1"
 )
 public class RunnerAdmin {
 

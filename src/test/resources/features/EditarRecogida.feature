@@ -9,8 +9,8 @@
 
       Examples:
         |    Cedula|   Celular|
-        |1024567308|3105761988|
-        |1024567208|3105761928|
+        |  41778013|3133160298|
+        |1024567308|3005761988|
         |NuevoEdita|NuevoEdita|
 
     @FuncionalidadEditar @PruebasRegresion
@@ -21,8 +21,8 @@
 
       Examples:
         |    Cedula|   Celular|
-        |1024567308|3105761988|
-        |1024567208|3105761928|
+        |  41778013|3133160298|
+        |1024567308|3005761988|
         |NuevoAgreg|NuevoAgreg|
 
     @FuncionalidadEditar @PruebasRegresion
@@ -33,8 +33,8 @@
 
       Examples:
         |    Cedula|   Celular|
-        |1024567308|3105761988|
-        |1024567208|3105761928|
+        |  41778013|3133160298|
+        |1024567308|3005761988|
         |NuevoBorra|NuevoBorra|
 
     @FuncionalidadEditar @PruebasRegresion
@@ -45,8 +45,8 @@
 
       Examples:
         |    Cedula|   Celular|
-        |1024567308|3105761988|
-        |1024567208|3105761928|
+        |  41778013|3133160298|
+        |1024567308|3005761988|
         |NuevoDesas|NuevoDesas|
 
     @FuncionalidadEditar @PruebasRegresion
@@ -57,6 +57,6 @@
 
       Examples:
         |    Cedula|   Celular|
-        |1024567308|3105761988|
-        |1024567208|3105761928|
+        |  41778013|3133160298|
+        |1024567308|3005761988|
         |NuevoCance|NuevoCance|

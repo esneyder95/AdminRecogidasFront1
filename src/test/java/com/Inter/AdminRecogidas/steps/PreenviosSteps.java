@@ -1,17 +1,13 @@
 package com.Inter.AdminRecogidas.steps;
+
 import com.Inter.AdminRecogidas.pageObjects.*;
 import net.thucydides.core.annotations.Step;
-
 import java.io.IOException;
 
 public class PreenviosSteps {
-
-    PantallaconfirmacionPage pantallaconfirmacionPage = new PantallaconfirmacionPage();
     CotizaciondeenviosPage cotizaciondeenviosPage = new CotizaciondeenviosPage();
     DatosDestinatario datosDestinatario = new DatosDestinatario();
-
     PreenvioExitoso PreenvioExitoso = new PreenvioExitoso();
-
     ListadoTusRecogidas listadoTusRecogidas = new ListadoTusRecogidas();
 
     @Step
@@ -45,6 +41,14 @@ public class PreenviosSteps {
    public void informaciondedestinatario(){
         datosDestinatario.datoaDestinatario();
     }
+    @Step
+    public void informaciondedestinatariocongeo(){
+        datosDestinatario.datoaDestinatariocongeo();
+    }
+    @Step
+    public void informaciondedestinatariosingeo(){
+        datosDestinatario.datoDestinatariosingeo();
+    }
 
     @Step
     public void SolicitudPrenvioExitosa(){
@@ -54,6 +58,11 @@ public class PreenviosSteps {
     @Step
     public void SolicitudNuevoPrenvioExitoso() throws IOException {
         PreenvioExitoso.preenvioAfectacion();
+    }
+
+    @Step
+    public void SolicitudPrenvioExitoso() throws IOException {
+        PreenvioExitoso.preenvioexitosonuevo();
     }
 
     @Step

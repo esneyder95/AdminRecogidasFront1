@@ -9,8 +9,8 @@ Feature: Usuarios crea nueva recogidas y preenvios
 
     Examples:
       |    Cedula|   Celular|
-      |1024567308|3105761988|
-      |1024567208|3105761928|
+      |  41778013|3133160298|
+      |1024567308|3005761988|
       |ClienteNue|ClienteNue|
 
   @Funcional_CrearPreenvios @PruebasRegresion
@@ -21,8 +21,8 @@ Feature: Usuarios crea nueva recogidas y preenvios
 
     Examples:
       |    Cedula|   Celular|
-      |1024567308|3105761988|
-      |1024567208|3105761928|
+      |  41778013|3133160298|
+      |1024567308|3005761988|
       |ClienteNue|ClienteNue|
 
   @Funcional_CrearPreenvios @PruebasRegresion
@@ -33,6 +33,6 @@ Feature: Usuarios crea nueva recogidas y preenvios
 
     Examples:
       |    Cedula|   Celular|
-      |1024567308|3105761988|
-      |1024567208|3105761928|
+      |  41778013|3133160298|
+      |1024567308|3005761988|
       |ClienteNue|ClienteNue|

@@ -4,19 +4,13 @@ import com.Inter.AdminRecogidas.pageObjects.DatosRecogidaPage;
 import com.Inter.AdminRecogidas.pageObjects.ListadoTusRecogidas;
 import com.Inter.AdminRecogidas.pageObjects.PantallaAsociarRecogidas;
 import com.Inter.AdminRecogidas.pageObjects.PantallaEditarRecogidasPage;
-import com.opencsv.exceptions.CsvValidationException;
 import net.thucydides.core.annotations.Step;
-
-import java.io.IOException;
 
 public class EditarRecogidasSteps {
 
     ListadoTusRecogidas listadoTusRecogidas = new ListadoTusRecogidas();
-
     PantallaEditarRecogidasPage pantallaEditarRecogidasPage = new PantallaEditarRecogidasPage();
-
     DatosRecogidaPage datosRecogidaPage = new DatosRecogidaPage();
-
     PantallaAsociarRecogidas pantallaAsociarRecogidas = new PantallaAsociarRecogidas();
 
     @Step
@@ -69,6 +63,7 @@ public class EditarRecogidasSteps {
     public void nuevarecogida(){
         datosRecogidaPage.nuevarecogida();
     }
+
     @Step
     public void regresarrecogida(){
         datosRecogidaPage.regresarnuevarecogida();
