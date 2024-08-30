@@ -1,5 +1,6 @@
 package com.Inter.AdminRecogidas.pageObjects;
 
+import com.Inter.AdminRecogidas.utils.GenerarReporte;
 import com.Inter.AdminRecogidas.utils.InteractorTime;
 import net.serenitybdd.core.pages.PageObject;
 import org.openqa.selenium.By;
@@ -8,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PantallaEditarRecogidasPage extends PageObject {
 
+    GenerarReporte generarReporte = new GenerarReporte();
     public By cancelarrecogida = By.id("btnCancelarRecogida");
     public By cancelarconfirmacion = By.id("GuardarCancelacionRecogida");
     public By editarecogida = By.id("btnEditarRecogida");
@@ -30,6 +32,8 @@ public class PantallaEditarRecogidasPage extends PageObject {
             tiempo.until(ExpectedConditions.elementToBeClickable(editarecogida));
             getDriver().findElement(editarecogida).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No se cargo popup opciones Editar Recogidas","");
             throw new RuntimeException("No se cargo popup opciones Editar Recogidas");
         }
     }
@@ -39,6 +43,8 @@ public class PantallaEditarRecogidasPage extends PageObject {
             tiempo.until(ExpectedConditions.elementToBeClickable(agregarpreenvio));
             getDriver().findElement(agregarpreenvio).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No se cargo popup opciones Editar Recogidas","");
             throw new RuntimeException("No se cargo popup opciones Editar Recogidas");
         }
     }
@@ -52,6 +58,8 @@ public class PantallaEditarRecogidasPage extends PageObject {
             tiempo.until(ExpectedConditions.elementToBeClickable(confirmarborradoPRE));
             getDriver().findElement(confirmarborradoPRE).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No se cargo popup opciones Editar Recogidas","");
             throw new RuntimeException("No se cargo popup opciones Editar Recogidas");
         }
     }
@@ -65,6 +73,8 @@ public class PantallaEditarRecogidasPage extends PageObject {
             tiempo.until(ExpectedConditions.elementToBeClickable(desasociarpre));
             getDriver().findElement(desasociarpre).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No se cargo popup opciones Editar Recogidas","");
             throw new RuntimeException("No se cargo popup opciones Editar Recogidas");
         }
     }

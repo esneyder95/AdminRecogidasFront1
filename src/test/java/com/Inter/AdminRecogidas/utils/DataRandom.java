@@ -20,21 +20,21 @@ public class DataRandom extends PageObject {
         int cel1 = (int) (1 + (Math.random() * 299));
         int cel2 = (int) (1 + (Math.random() * 999));
         int cel3 = (int) (1 + (Math.random() * 999));
-        if (cel1<100 && cel1>10){
+        if (cel1<100 && cel1>=10){
             celu1 = ("0" + cel1);
         }else if (cel1<10){
             celu1 = ("00" + cel1);
         }else{
             celu1 = String.valueOf(cel1);
         }
-        if (cel2<100 && cel2>10){
+        if (cel2<100 && cel2>=10){
             celu2 = ("0" + cel2);
         }else if (cel2<10){
             celu2 = ("00" + cel2);
         }else{
             celu2 = String.valueOf(cel2);
         }
-        if (cel3<100 && cel3>10){
+        if (cel3<100 && cel3>=10){
             celu3 = ("0" + cel3);
         }else if (cel3<10){
             celu3 = ("00" + cel3);

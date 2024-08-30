@@ -1,29 +1,46 @@
 package com.Inter.AdminRecogidas.definitions;
 
+import com.Inter.AdminRecogidas.pageObjects.PantallaconfirmacionPage;
+import com.Inter.AdminRecogidas.pageObjects.PreenvioExitoso;
 import com.Inter.AdminRecogidas.steps.AdminformularioSteps;
 import com.Inter.AdminRecogidas.steps.EditarRecogidasSteps;
 import com.Inter.AdminRecogidas.steps.PreenviosSteps;
 import com.Inter.AdminRecogidas.steps.CvsSteps;
 import com.Inter.AdminRecogidas.utils.DataCvs;
+import com.Inter.AdminRecogidas.utils.GenerarReporte;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.gherkin.model.ScenarioOutline;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.opencsv.exceptions.CsvValidationException;
+import io.cucumber.gherkin.Gherkin;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+import io.cucumber.junit.CucumberSerenityRunner;
+import io.cucumber.plugin.event.Node;
+import net.serenitybdd.core.annotations.events.AfterScenario;
 import net.serenitybdd.core.pages.PageObject;
+import net.thucydides.core.annotations.Feature;
 import org.openqa.selenium.By;
+
+import javax.annotation.Resource;
 import java.io.IOException;
 
 public class AdminformularioDefinitions extends PageObject {
-
     public By recogida1 = By.xpath("//div[@name='registros']/ul[1]/li[4]");
     AdminformularioSteps adminformularioSteps = new AdminformularioSteps();
     PreenviosSteps preenviosSteps = new PreenviosSteps();
     CvsSteps cvsSteps = new CvsSteps();
     DataCvs dataCvs = new DataCvs();
     EditarRecogidasSteps editarRecogidasSteps = new EditarRecogidasSteps();
+    GenerarReporte generarReporte = new GenerarReporte();
 
     @Given("Ingresa la pagina de recogidas")
     public void ingresa_la_pagina_de_recogidas() {
@@ -123,14 +140,15 @@ public class AdminformularioDefinitions extends PageObject {
         adminformularioSteps.regresohomeexitoso();
     }
 
-    @Then("la solicitud del preenvio es creada exitosamente {}")
-    public void SolicitudPreenvioExitosa(String Cedula) {
+    @Then("la solicitud del preenvio es creada exitosamente {} {}")
+    public void SolicitudPreenvioExitosa(String Cedula,String Scenario) {
         preenviosSteps.SolicitudPrenvioExitosa();
         if (Cedula.equals("ClienteNue")){
             System.out.println("Cliente Nuevo creo un preenvio exitosamente");
         }else {
             System.out.println("Cliente con Numero de Cedula: " + Cedula + " creo un preenvio exitosamente");
         }
+        generarReporte.CasoExitoso(Cedula,Scenario);
     }
 
     @Given("Documento de todos los clientes")
@@ -165,8 +183,9 @@ public class AdminformularioDefinitions extends PageObject {
 
     //////////////////////-------------------------- Usuario Frecuente ------------------------///////////////////////////
 
-    @Given("Ingreso a la pagina de recogidas. {} {}")
-    public void PaginaRecogida(String Cedula, String Celular) throws CsvValidationException, IOException {
+    @Given("Ingreso a la pagina de recogidas. {} {} {}")
+    public void PaginaRecogida(String Cedula, String Celular,String Scenario) throws CsvValidationException, IOException {
+        generarReporte.CasoFallido(Cedula,"",Scenario);
         if (Cedula.equals("ClienteNue")){
             adminformularioSteps.ingresalapaginaderecogidas();
             adminformularioSteps.ingresalosdatosdePersonales();
@@ -193,10 +212,12 @@ public class AdminformularioDefinitions extends PageObject {
         }else {
             System.out.println("Cliente con Numero de Cedula: " + Cedula + " diligencia una nueva recogida");
         }
+        generarReporte.CasoExitoso(Cedula,"Usuario diligencia formulario de recogida.");
     }
 
-    @Given("Ingreso a la opcion de Agregar Preenvios de una nueva recogida. {} {}")
-    public void PaginaRecogidaPre(String Cedula, String Celular) throws CsvValidationException, IOException {
+    @Given("Ingreso a la opcion de Agregar Preenvios de una nueva recogida. {} {} {}")
+    public void PaginaRecogidaPre(String Cedula, String Celular, String Scenario) throws CsvValidationException, IOException {
+        generarReporte.CasoFallido(Cedula,"",Scenario);
         if (Cedula.equals("ClienteNue")){
             adminformularioSteps.ingresalapaginaderecogidas();
             adminformularioSteps.ingresalosdatosdePersonales();

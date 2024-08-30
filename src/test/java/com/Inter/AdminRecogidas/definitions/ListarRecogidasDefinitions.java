@@ -13,7 +13,6 @@ public class ListarRecogidasDefinitions extends PageObject {
 
     AdminformularioSteps adminformularioSteps = new AdminformularioSteps();
     ListarRecogidasSteps listarRecogidasSteps = new ListarRecogidasSteps();
-    PreenviosSteps preenviosSteps = new PreenviosSteps();
     EditarRecogidasSteps editarRecogidasSteps = new EditarRecogidasSteps();
 
     @Given("Un listado de recogidas {} {}")

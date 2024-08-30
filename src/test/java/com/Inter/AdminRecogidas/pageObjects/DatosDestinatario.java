@@ -1,6 +1,7 @@
 package com.Inter.AdminRecogidas.pageObjects;
 
 import com.Inter.AdminRecogidas.utils.DataCvs;
+import com.Inter.AdminRecogidas.utils.GenerarReporte;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -21,6 +22,7 @@ import static org.junit.Assert.fail;
 public class DatosDestinatario extends PageObject{
 
     InteractorTime interactorTime = new InteractorTime();
+    GenerarReporte generarReporte = new GenerarReporte();
     public By CotizarPreenvio = By.id("CotizarPreenvio");
     public By destinatarionombreCompleto = By.id("txtDestinatarioNombres");
     public By destinatarioapellidoCompleto = By.id("txtDestinatarioApellidos");
@@ -42,6 +44,8 @@ public class DatosDestinatario extends PageObject{
             tiempo.until(ExpectedConditions.elementToBeClickable(destinatarioNumeroIdentificacion));
             interactorTime.esperaMilis(500);
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo formulario de destinatario","");
             throw new RuntimeException("No cargo formulario de destinatario");
         }
         getDriver().findElement(destinatarioNumeroIdentificacion).sendKeys("41778012");
@@ -69,6 +73,7 @@ public class DatosDestinatario extends PageObject{
         getDriver().findElement(destinatarioDireccion).sendKeys(Keys.TAB);
         interactorTime.esperaMilis(1000);
         getDriver().findElement(destinatarioCorreo).sendKeys("Correo@gmail.com");
+        generarReporte.TomarPantallazo();
         getDriver().findElement(destinatarioGuardar).click();
     }
     public void datoaDestinatariocongeo(){
@@ -76,6 +81,8 @@ public class DatosDestinatario extends PageObject{
             tiempo.until(ExpectedConditions.elementToBeClickable(destinatarioNumeroIdentificacion));
             interactorTime.esperaMilis(500);
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo formulario de destinatario","");
             throw new RuntimeException("No cargo formulario de destinatario");
         }
         getDriver().findElement(destinatarioNumeroIdentificacion).sendKeys("41778012");
@@ -118,6 +125,8 @@ public class DatosDestinatario extends PageObject{
                 variable = body_array.getJSONObject(i).getString("mensaje");
             }
         } catch (UnirestException e) {
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No carga la georreferenciación","");
             throw new RuntimeException("No carga la georreferenciación");
         }
         if ((variable.equals("Geocodificacion Exitosa.")) && (getDriver().findElement(msggeoref).getAttribute("class").equals("alert-message with-close-button hide"))){
@@ -125,6 +134,8 @@ public class DatosDestinatario extends PageObject{
             getDriver().findElement(destinatarioGuardar).click();
         } else{
             try{
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","El sistema esta cargando el mensaje de advertencia","");
                 fail("El sistema esta cargando el mensaje de advertencia");
             }catch (final RuntimeException e){
                 assertTrue(true);
@@ -136,6 +147,8 @@ public class DatosDestinatario extends PageObject{
             tiempo.until(ExpectedConditions.elementToBeClickable(destinatarioNumeroIdentificacion));
             interactorTime.esperaMilis(500);
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo formulario de destinatario","");
             throw new RuntimeException("No cargo formulario de destinatario");
         }
         getDriver().findElement(destinatarioNumeroIdentificacion).sendKeys("218217");
@@ -163,6 +176,8 @@ public class DatosDestinatario extends PageObject{
             getDriver().findElement(destinatarioCorreo).sendKeys("Correo@gmail.com");
             getDriver().findElement(destinatarioGuardar).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","El sistema no carga la advertencia de georeferenciacion","");
             throw new RuntimeException("El sistema no carga la advertencia de georeferenciacion");
         }
     }
@@ -172,6 +187,8 @@ public class DatosDestinatario extends PageObject{
             tiempo.until(ExpectedConditions.elementToBeClickable(destinatarioNumeroIdentificacion));
             interactorTime.esperaMilis(500);
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo formulario de destinatario","");
             throw new RuntimeException("No cargo formulario de destinatario");
         }
         getDriver().findElement(destinatarioNumeroIdentificacion).sendKeys("41778013");
@@ -190,6 +207,8 @@ public class DatosDestinatario extends PageObject{
             try {
                 getDriver().findElement(CotizarPreenvio).click();
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","Los datos no son correctos","");
                 throw new RuntimeException("Los datos no son correctos");
             }
         }
@@ -200,12 +219,16 @@ public class DatosDestinatario extends PageObject{
             tiempo.until(ExpectedConditions.elementToBeClickable(destinatarioNumeroIdentificacion));
             interactorTime.esperaMilis(500);
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo formulario de destinatario","");
             throw new RuntimeException("No cargo formulario de destinatario");
         }
         try {
             getDriver().findElement(regresar).click();
             interactorTime.esperaMilis(2000);
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","El boton regresar no funciona","");
             throw new RuntimeException("No funciona boton regresar");
         }
     }
@@ -215,6 +238,8 @@ public class DatosDestinatario extends PageObject{
             tiempo.until(ExpectedConditions.elementToBeClickable(destinatarioNumeroIdentificacion));
             interactorTime.esperaMilis(500);
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo formulario de destinatario","");
             throw new RuntimeException("No cargo formulario de destinatario");
         }
         getDriver().findElement(destinatarioNumeroIdentificacion).sendKeys(DataCvs.cedulades2());
@@ -236,6 +261,8 @@ public class DatosDestinatario extends PageObject{
                 tiempo.until(ExpectedConditions.elementToBeClickable(destinatarioNumeroIdentificacion));
                 interactorTime.esperaMilis(500);
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo formulario de destinatario","");
                 throw new RuntimeException("No cargo formulario de destinatario");
             }
             getDriver().findElement(destinatarioNumeroIdentificacion).sendKeys(cedulaDes);
@@ -265,6 +292,8 @@ public class DatosDestinatario extends PageObject{
                 tiempo.until(ExpectedConditions.elementToBeClickable(destinatarioNumeroIdentificacion));
                 interactorTime.esperaMilis(500);
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo formulario de destinatario","");
                 throw new RuntimeException("No cargo formulario de destinatario");
             }
             getDriver().findElement(destinatarioNumeroIdentificacion).sendKeys(cedulaDes);
@@ -294,6 +323,8 @@ public class DatosDestinatario extends PageObject{
                 tiempo.until(ExpectedConditions.elementToBeClickable(destinatarioNumeroIdentificacion));
                 interactorTime.esperaMilis(500);
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo formulario de destinatario","");
                 throw new RuntimeException("No cargo formulario de destinatario");
             }
             getDriver().findElement(destinatarioNumeroIdentificacion).sendKeys(cedulaDes);
@@ -321,6 +352,8 @@ public class DatosDestinatario extends PageObject{
                 tiempo.until(ExpectedConditions.elementToBeClickable(destinatarioNumeroIdentificacion));
                 interactorTime.esperaMilis(500);
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo formulario de destinatario","");
                 throw new RuntimeException("No cargo formulario de destinatario");
             }
             cedulaDes = getDriver().findElement(destinatarioNumeroIdentificacion).getAttribute("value");

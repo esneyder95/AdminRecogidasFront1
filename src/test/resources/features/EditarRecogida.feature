@@ -17,7 +17,7 @@
     Scenario Outline: Cliente Agrega un preenvio
       Given Dado un listado de recogidas <Cedula> <Celular>
       When Agrego un preenvio
-      Then la solicitud del preenvio es creada exitosamente <Cedula>
+      Then la solicitud del preenvio es creada exitosamente <Cedula> <Cliente Agrega un preenvio>
 
       Examples:
         |    Cedula|   Celular|

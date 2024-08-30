@@ -1,11 +1,17 @@
 package com.Inter.AdminRecogidas.pageObjects;
 
 import com.Inter.AdminRecogidas.utils.DataCvs;
+import com.Inter.AdminRecogidas.utils.GenerarReporte;
 import com.Inter.AdminRecogidas.utils.InteractorTime;
 import net.serenitybdd.core.pages.PageObject;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,23 +20,28 @@ public class PreenvioExitoso extends PageObject {
 
     DataCvs dataCvs = new DataCvs();
     InteractorTime interactorTime = new InteractorTime();
+    GenerarReporte generarReporte = new GenerarReporte();
     public By numerodePreenvio = By.id("IdPreenvio");
     public By cerrar = By.xpath("//div[@class='created-preshipping modal-container container']/div[1]/div[1]/img");
     public By agregarOtroPreenvio = By.id("AgregarPreenvio");
     public By cargando = By.id("cargando");
     WebDriverWait tiempo = new WebDriverWait(getDriver(),30);
     static List<String[]> OustCsv = new ArrayList<String[]>();
+    static String NombreImagen;
 
     public void preenvioexitoso() {
         try {
             tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
+            String texto = getDriver().findElement(numerodePreenvio).getText();
+            Long numeropreenvio = Long.parseLong(texto);
+            System.out.println("Numero de preenvio: " + numeropreenvio);
+            interactorTime.esperaMilis(1000);
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","Error de cargue de agregar envio","");
             throw new RuntimeException("Error de cargue de agregar envio");
         }
-        String texto = getDriver().findElement(numerodePreenvio).getText();
-        Long numeropreenvio = Long.parseLong(texto);
-        System.out.println("Numero de preenvio: " + numeropreenvio);
-        interactorTime.esperaMilis(1000);
+        generarReporte.TomarPantallazo();
         getDriver().findElement(cerrar).click();
         interactorTime.esperaMilis(1000);
         System.out.println("Preenvio exitoso");
@@ -40,6 +51,8 @@ public class PreenvioExitoso extends PageObject {
         try {
             tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","Error de cargue de agregar envio","");
             throw new RuntimeException("Error de cargue de agregar envio");
         }
         String texto = getDriver().findElement(numerodePreenvio).getText();
@@ -58,6 +71,8 @@ public class PreenvioExitoso extends PageObject {
         try {
             tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","Error de cargue de agregar envio","");
             throw new RuntimeException("Error de cargue de agregar envio");
         }
         interactorTime.esperaMilis(1000);
@@ -76,6 +91,8 @@ public class PreenvioExitoso extends PageObject {
         try {
             tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","Error de cargue de agregar envio","");
             throw new RuntimeException("Error de cargue de agregar envio");
         }
         interactorTime.esperaMilis(1000);
@@ -92,12 +109,15 @@ public class PreenvioExitoso extends PageObject {
         try {
             tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","Error de cargue de agregar envio","");
             throw new RuntimeException("Error de cargue de agregar envio");
         }
         interactorTime.esperaMilis(1000);
         String texto = getDriver().findElement(numerodePreenvio).getText();
         Long numeropreenvio = Long.parseLong(texto);
         System.out.println("Numero de preenvio: " + numeropreenvio);
+        generarReporte.TomarPantallazo();
         getDriver().findElement(agregarOtroPreenvio).click();
     }
 
@@ -105,6 +125,8 @@ public class PreenvioExitoso extends PageObject {
         try {
             tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","Error de cargue de agregar envio","");
             throw new RuntimeException("Error de cargue de agregar envio");
         }
         interactorTime.esperaMilis(1000);

@@ -13,7 +13,7 @@ Feature: Crear Recogidas + Crear preenvio archivos CVS
 
   @Formulario_CVS_APP
  Scenario Outline: Crear preenvios para pruebas de APP
-    Given Ingreso a la pagina de recogidas. <Cedula> <Celular>
+    Given Ingreso a la pagina de recogidas. <Cedula> <Celular> <Crear_preenvios_para_pruebas_de_APP>
     When  Ingreso diferentes preenvios <Cedula> <Celular>
     Then  Creo data de formularios exitosos
 

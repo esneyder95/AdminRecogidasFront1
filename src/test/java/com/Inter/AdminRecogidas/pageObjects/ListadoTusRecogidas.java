@@ -1,6 +1,7 @@
 package com.Inter.AdminRecogidas.pageObjects;
 
 import com.Inter.AdminRecogidas.utils.DataRandom;
+import com.Inter.AdminRecogidas.utils.GenerarReporte;
 import com.Inter.AdminRecogidas.utils.InteractorTime;
 import com.Inter.AdminRecogidas.utils.ListadoRecogidasRandom;
 import com.github.rjeschke.txtmark.Run;
@@ -18,6 +19,7 @@ public class ListadoTusRecogidas extends PageObject {
 
     InteractorTime interactorTime = new InteractorTime();
     ListadoRecogidasRandom listadoRecogidasRandom = new ListadoRecogidasRandom();
+    GenerarReporte generarReporte = new GenerarReporte();
     public By EditaRecogida = By.xpath("//div[@name='registros']/ul[1]/li[7]/a[2]");
     public By AgregarPreenvio = By.xpath("//div[@name='registros']/ul[1]/li[7]/a[1]");
     public By cancelar = By.xpath("//div[@name='registros']/ul[1]/li[7]/a[3]");
@@ -26,13 +28,15 @@ public class ListadoTusRecogidas extends PageObject {
     public By Nrecogida = By.xpath("//div[@name='registros']/ul[1]/li[1]");
     public By filtradoEstado = By.id("filtroEstadoRecogida");
     public By listarecogida = By.xpath("//div[@name='registros']/ul[1]/li[3]");
-    WebDriverWait tiempo = new WebDriverWait(getDriver(),30);
+    WebDriverWait tiempo = new WebDriverWait(getDriver(), 30);
 
     public void EditarRecogida(){
         try {
             tiempo.until(ExpectedConditions.elementToBeClickable(EditaRecogida));
             getDriver().findElement(EditaRecogida).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No se encontró funcionalidad Editar Recogida","");
             throw new RuntimeException("No se encontró funcionalidad Editar Recogida");
         }
     }
@@ -48,6 +52,8 @@ public class ListadoTusRecogidas extends PageObject {
         try {
             getDriver().findElement(EditaRecogida).isDisplayed();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","El regreso no fue exitoso","");
             throw new RuntimeException("El regreso no fue exitoso");
         }
     }
@@ -56,6 +62,8 @@ public class ListadoTusRecogidas extends PageObject {
         try{
             tiempo.until(ExpectedConditions.attributeToBe(By.id("MensajeNotificacion"),"class","message-fixed-button"));
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No se edito/cancelo la recogida","");
             throw new RuntimeException("No se edito/cancelo la recogida");
         }
     }
@@ -64,6 +72,8 @@ public class ListadoTusRecogidas extends PageObject {
         try {
             getDriver().findElement(AgregarPreenvio).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No se encontró funcionalidad Agregar Preenvio","");
             throw new RuntimeException("No se encontró funcionalidad Agregar Preenvio");
         }
     }
@@ -80,6 +90,8 @@ public class ListadoTusRecogidas extends PageObject {
             System.out.println("El filtrado por Id = " + ListadoRecogidasRandom.IdlistadoRecogida() + " fue exitosa");
         }else{
             try{
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","El filtrado no fue lo esperado","");
                 fail("El filtrado no fue lo esperado");
             }catch (final RuntimeException e){
                 assertTrue(true);
@@ -107,6 +119,8 @@ public class ListadoTusRecogidas extends PageObject {
             }
             interactorTime.esperaMilis(1000);
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No se encuentra la opcion de filtrar por estado","");
             throw new RuntimeException("No se encuentra la opcion de filtrar por estado");
         }
     }
@@ -117,6 +131,8 @@ public class ListadoTusRecogidas extends PageObject {
                 System.out.println("El sistema filtro corectamente");
             }else{
                 try{
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","El sistema no filtro correctamente","");
                     fail("El sistema no filtro correctamente");
                 }catch (final RuntimeException e){
                     assertTrue(true);
@@ -128,6 +144,8 @@ public class ListadoTusRecogidas extends PageObject {
                 System.out.println("El sistema filtro corectamente");
             }else{
                 try{
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","El sistema no filtro correctamente","");
                     fail("El sistema no filtro correctamente");
                 }catch (final RuntimeException e){
                     assertTrue(true);

@@ -2,6 +2,7 @@ package com.Inter.AdminRecogidas.pageObjects;
 
 import com.Inter.AdminRecogidas.utils.DataCvs;
 import com.Inter.AdminRecogidas.utils.DataRandom;
+import com.Inter.AdminRecogidas.utils.GenerarReporte;
 import org.openqa.selenium.*;
 import net.serenitybdd.core.pages.PageObject;
 import com.Inter.AdminRecogidas.utils.InteractorTime;
@@ -19,6 +20,7 @@ public class CotizaciondeenviosPage extends PageObject{
     InteractorTime interactorTime = new InteractorTime();
     ListadoTusRecogidas listadoTusRecogidas = new ListadoTusRecogidas();
     DataRandom dataRandom = new DataRandom();
+    GenerarReporte generarReporte = new GenerarReporte();
     int respuesta = 0;
     public By cotizacionCiudad = By.id("CiudadDestino");
     public By cotizaciondonde = By.xpath("//div[@id='DatosCotizacion']/div[1]/div[1]/form/div[6]/select");
@@ -62,6 +64,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     )
             );
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo ventana de cotizar preenvio","");
             throw new RuntimeException("No cargo pagina de cotizar preenvio");
         }
         if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
@@ -74,6 +78,8 @@ public class CotizaciondeenviosPage extends PageObject{
                         )
                 );
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo ventana de cotizar preenvio","");
                 throw new RuntimeException("No cargo pagina de cotizar preenvio");
             }
         }
@@ -140,6 +146,8 @@ public class CotizaciondeenviosPage extends PageObject{
         try {
             tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo lista de servicios","");
             throw new RuntimeException("No cargo lista de servicios");
         }
         try {
@@ -147,6 +155,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
             opcionesServicios.click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo el servicio de Mensajeria Expresa","");
             throw new RuntimeException("No cargo el servicio de Mensajeria Expresa");
         }
     }
@@ -163,6 +173,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     )
             );
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la ventana de cotizar preenvio","");
             throw new RuntimeException("No cargo pagina de cotizar preenvio");
         }
         if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
@@ -175,6 +187,8 @@ public class CotizaciondeenviosPage extends PageObject{
                         )
                 );
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo la ventana de cotizar preenvio","");
                 throw new RuntimeException("No cargo pagina de cotizar preenvio");
             }
         }
@@ -196,6 +210,8 @@ public class CotizaciondeenviosPage extends PageObject{
             http.connect();
             respuesta = http.getResponseCode();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No se encuentra link para actualizar la cuenta","");
             throw new RuntimeException("No se encuentra link para actualizar la cuenta");
         }
     }
@@ -206,6 +222,8 @@ public class CotizaciondeenviosPage extends PageObject{
             try {
                 getDriver().findElement(regresar).click();
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","link de actualizar cuenta no funciona","");
                 throw new RuntimeException("El link se encuentra roto");
             }
         }
@@ -223,6 +241,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     )
             );
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la ventana de cotizar preenvio","");
             throw new RuntimeException("No cargo pagina de cotizar preenvio");
         }
         if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
@@ -235,6 +255,8 @@ public class CotizaciondeenviosPage extends PageObject{
                         )
                 );
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo la ventana de cotizar preenvio","");
                 throw new RuntimeException("No cargo pagina de cotizar preenvio");
             }
         }
@@ -265,6 +287,8 @@ public class CotizaciondeenviosPage extends PageObject{
             try {
                 getDriver().findElement(pagoencasa).click();
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","Opcion pago en casa no esta habilitado","");
                 throw new RuntimeException("Opcion pago en casa no esta habilitada");
             }
             interactorTime.esperaMilis(1000);
@@ -306,6 +330,8 @@ public class CotizaciondeenviosPage extends PageObject{
                 tiempo.until(ExpectedConditions.attributeToBe(By.id("ConfirmarValorComercialPagoEnCasa"),"class","confirm-commercial-value-container"));
                 interactorTime.esperaMilis(1000);
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo popup informacion de cuenta bancaria","");
                 throw new RuntimeException("No cargo pop up informacion de cuenta bancaria");
             }
         }
@@ -323,6 +349,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     )
             );
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la ventana de cotizar preenvio","");
             throw new RuntimeException("No cargo pagina de cotizar preenvio");
         }
         if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
@@ -335,6 +363,8 @@ public class CotizaciondeenviosPage extends PageObject{
                         )
                 );
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo la ventana de cotizar preenvio","");
                 throw new RuntimeException("No cargo pagina de cotizar preenvio");
             }
         }
@@ -410,6 +440,8 @@ public class CotizaciondeenviosPage extends PageObject{
         try {
             tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo lista de servicios","");
             throw new RuntimeException("No cargo lista de servicios");
         }
         try {
@@ -417,6 +449,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
             opcionesServicios.click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","El servicio de Mensajeria Expresa no se encuentra","");
             throw new RuntimeException("No cargo el servicio de Mensajeria Expresa");
         }
     }
@@ -433,6 +467,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     )
             );
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la ventana de cotizar preenvio","");
             throw new RuntimeException("No cargo pagina de cotizar preenvio");
         }
         if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
@@ -445,6 +481,8 @@ public class CotizaciondeenviosPage extends PageObject{
                         )
                 );
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo la ventana de cotizar preenvio","");
                 throw new RuntimeException("No cargo pagina de cotizar preenvio");
             }
         }
@@ -505,6 +543,8 @@ public class CotizaciondeenviosPage extends PageObject{
             try {
                 tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo lista de servicios","");
                 throw new RuntimeException("No cargo lista de servicios");
             }
             try {
@@ -515,6 +555,8 @@ public class CotizaciondeenviosPage extends PageObject{
                 interactorTime.esperaMilis(1000);
                 getDriver().findElement(btnjudiciales).click();
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","El servicio de Notificaciones Jusiciales no se encuentra","");
                 throw new RuntimeException("No cargo el servicio de Notificaciones Jusiciales");
             }
         }
@@ -582,12 +624,16 @@ public class CotizaciondeenviosPage extends PageObject{
                 try {
                     tiempo.until(ExpectedConditions.attributeToBe(By.id("ConfirmarValorComercialPagoEnCasa"),"class","confirm-commercial-value-container"));
                 }catch (Exception e){
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","No cargo pop up informacion de cuenta bancaria","");
                     throw new RuntimeException("No cargo pop up informacion de cuenta bancaria");
                 }
                 getDriver().findElement(confirmarCuenta).click();
                 try {
                     tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
                 }catch (Exception e){
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","No cargo lista de servicios","");
                     throw new RuntimeException("No cargo lista de servicios");
                 }
                 try {
@@ -596,6 +642,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     opcionesServicios.click();
                     tiposervicio = "Mensajería";
                 }catch (Exception e){
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","El servicio de Mensajeria no se encuentra","");
                     throw new RuntimeException("No cargo el servicio de Mensajeria");
                 }
             }
@@ -665,6 +713,8 @@ public class CotizaciondeenviosPage extends PageObject{
             try {
                 tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo lista de servicios","");
                 throw new RuntimeException("No cargo lista de servicios");
             }
             try {
@@ -673,6 +723,8 @@ public class CotizaciondeenviosPage extends PageObject{
                 opcionesServicios.click();
                 tiposervicio = "Mensajería";
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","El servicio de Mensajeria Expresa no se encuentra","");
                 throw new RuntimeException("No cargo el servicio de Mensajeria Expresa");
             }
         }
@@ -736,6 +788,8 @@ public class CotizaciondeenviosPage extends PageObject{
             }
             if (getDriver().findElement(errorconvenio).getAttribute("class").equals("form-group col-md-3 col-xs-12 customer-agreement no-padding-right error-input")){
                 try{
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","El codigo de convenio esta errado","");
                     fail("El codigo de convenio esta errado");
                 }catch (final RuntimeException e){
                     assertTrue(true);
@@ -744,6 +798,8 @@ public class CotizaciondeenviosPage extends PageObject{
             try {
                 tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo lista de servicios","");
                 throw new RuntimeException("No cargo lista de servicios");
             }
             try {
@@ -752,6 +808,8 @@ public class CotizaciondeenviosPage extends PageObject{
                 opcionesServicios.click();
                 tiposervicio = "Mensajería";
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","El servicio de Mensajeria Expresa no se encuentra","");
                 throw new RuntimeException("No cargo el servicio de Mensajeria Expresa");
             }
         }
@@ -768,6 +826,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     )
             );
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la ventana de cotizar preenvio","");
             throw new RuntimeException("No cargo pagina de cotizar preenvio");
         }
         if (getDriver().findElement(listapreenviosnoasociados).getAttribute("class").equals("disassociated-preshippings-container")){
@@ -780,6 +840,8 @@ public class CotizaciondeenviosPage extends PageObject{
                         )
                 );
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo la ventana de cotizar preenvio","");
                 throw new RuntimeException("No cargo pagina de cotizar preenvio");
             }
         }
@@ -859,6 +921,8 @@ public class CotizaciondeenviosPage extends PageObject{
             try {
                 tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo lista de servicios","");
                 throw new RuntimeException("No cargo lista de servicios");
             }
             try {
@@ -876,6 +940,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     opcionesServicios.click();
                 }
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No se cargó ningún servicio","");
                 throw new RuntimeException("No se cargó ningún servicio");
             }
         }
@@ -932,6 +998,8 @@ public class CotizaciondeenviosPage extends PageObject{
             try {
                 getDriver().findElement(pagoencasa).click();
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","Opcion pago en casa no esta habilitado","");
                 throw new RuntimeException("Opcion pago en casa no esta habilitada");
             }
             interactorTime.esperaMilis(1000);
@@ -962,11 +1030,15 @@ public class CotizaciondeenviosPage extends PageObject{
                 tiempo.until(ExpectedConditions.attributeToBe(By.id("ConfirmarValorComercialPagoEnCasa"),"class","confirm-commercial-value-container"));
                 getDriver().findElement(confirmarCuenta).click();
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo pop up informacion de cuenta bancaria","");
                 throw new RuntimeException("No cargo pop up informacion de cuenta bancaria");
             }
             try {
                 tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo lista de servicios","");
                 throw new RuntimeException("No cargo lista de servicios");
             }
             try {
@@ -984,6 +1056,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     opcionesServicios.click();
                 }
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No se cargó ningún servicio","");
                 throw new RuntimeException("No se cargó ningún servicio");
             }
         }
@@ -1071,6 +1145,8 @@ public class CotizaciondeenviosPage extends PageObject{
             try {
                 tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo lista de servicios","");
                 throw new RuntimeException("No cargo lista de servicios");
             }
             try {
@@ -1087,6 +1163,8 @@ public class CotizaciondeenviosPage extends PageObject{
                     getDriver().findElement(btnradicado).click();
                 }
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No se cargó ningún servicio","");
                 throw new RuntimeException("No se cargó ningún servicio");
             }
         }
@@ -1142,6 +1220,8 @@ public class CotizaciondeenviosPage extends PageObject{
             }
             if (getDriver().findElement(errorconvenio).getAttribute("class").equals("form-group col-md-3 col-xs-12 customer-agreement no-padding-right error-input")){
                 try{
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","El codigo de convenio esta errado","");
                     fail("El codigo de convenio esta errado");
                 }catch (final RuntimeException e){
                     assertTrue(true);
@@ -1150,6 +1230,8 @@ public class CotizaciondeenviosPage extends PageObject{
             try {
                 tiempo.until(ExpectedConditions.attributeToBe(By.id("ListaServicios"),"class","service-selection-container"));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo lista de servicios","");
                 throw new RuntimeException("No cargo lista de servicios");
             }
             try {
@@ -1157,6 +1239,8 @@ public class CotizaciondeenviosPage extends PageObject{
                         xpath("//div[@class='service-selection modal-container container']/div[1]/div[1]/ul/li[@class='name']/span[text()='Mensajería Expresa']"));
                 opcionesServicios.click();
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","El servicio Mensajeria Expresa no se encuentra","");
                 throw new RuntimeException("No se cargó servicio Mensajeria Expresa");
             }
         }

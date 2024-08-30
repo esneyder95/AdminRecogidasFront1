@@ -2,15 +2,21 @@ package com.Inter.AdminRecogidas.pageObjects;
 
 import com.Inter.AdminRecogidas.utils.DataRandom;
 import com.Inter.AdminRecogidas.utils.DataCvs;
+import com.Inter.AdminRecogidas.utils.GenerarReporte;
 import net.thucydides.core.util.EnvironmentVariables;
 import net.thucydides.core.util.SystemEnvironmentVariables;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import com.Inter.AdminRecogidas.utils.InteractorTime;
 import net.serenitybdd.core.pages.PageObject;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -19,6 +25,7 @@ import static org.junit.Assert.fail;
 
 public class DatosPersonalesPage extends PageObject {
     InteractorTime interactorTime = new InteractorTime();
+    GenerarReporte generarReporte = new GenerarReporte();
     public By numeroidentificacion = By.id("NumeroIdentificacion");
     public By numerocelular = By.xpath("//input[@placeholder='Ej: 9991234567']");
     public By nombre = By.xpath("//div[@class='container form-container personal-data']/div/form/div[4]/input");
@@ -36,8 +43,11 @@ public class DatosPersonalesPage extends PageObject {
         try {
             EnvironmentVariables variables = SystemEnvironmentVariables.createEnvironmentVariables();
             Url = variables.getProperty("webdriver.Url");
-            getDriver().get(Url);
+            getDriver().get("https://recogidasencasa-qa-angular.interrapidisimo.com");
+            System.out.println("Se abre pagina");
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","La pagina web no cargo","");
             throw new RuntimeException("La pagina web no carga");
         }
     }
@@ -64,6 +74,8 @@ public class DatosPersonalesPage extends PageObject {
             try {
                 tiempo.until(ExpectedConditions.elementToBeClickable(numeroidentificacion));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo formulario de datos personales","");
                 throw new RuntimeException("No cargo formulario de datos personales");
             }
             getDriver().findElement(numeroidentificacion).sendKeys(cedula);
@@ -79,6 +91,8 @@ public class DatosPersonalesPage extends PageObject {
             getDriver().findElement(correoelectronico).sendKeys(DataRandom.CorreoElectronico());
             getDriver().findElement(continuarDatosP).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la pagina de Recogidas","");
             throw new RuntimeException("No cargo la pagina de Recogidas");
         }
     }
@@ -87,6 +101,8 @@ public class DatosPersonalesPage extends PageObject {
             try {
                 tiempo.until(ExpectedConditions.elementToBeClickable(numeroidentificacion));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo formulario de datos personales","");
                 throw new RuntimeException("No cargo formulario de datos personales");
             }
             getDriver().findElement(numeroidentificacion).sendKeys(Cedula);
@@ -95,6 +111,8 @@ public class DatosPersonalesPage extends PageObject {
             tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
             getDriver().findElement(continuarDatosP).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la pagina de Recogidas","");
             throw new RuntimeException("No cargo la pagina de Recogidas");
         }
     }
@@ -104,6 +122,8 @@ public class DatosPersonalesPage extends PageObject {
             try {
                 tiempo.until(ExpectedConditions.elementToBeClickable(numeroidentificacion));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo formulario de datos personales","");
                 throw new RuntimeException("No cargo formulario de datos personales");
             }
             getDriver().findElement(numeroidentificacion).sendKeys(Cedula);
@@ -112,6 +132,8 @@ public class DatosPersonalesPage extends PageObject {
             tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
             getDriver().findElement(continuarDatosP).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la pagina de Recogidas","");
             throw new RuntimeException("No cargo la pagina de Recogidas");
         }
     }
@@ -121,6 +143,8 @@ public class DatosPersonalesPage extends PageObject {
             try {
                 tiempo.until(ExpectedConditions.elementToBeClickable(numeroidentificacion));
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No cargo formulario de datos personales","");
                 throw new RuntimeException("No cargo formulario de datos personales");
             }
             getDriver().findElement(numeroidentificacion).sendKeys(DataCvs.cedula2());
@@ -129,6 +153,8 @@ public class DatosPersonalesPage extends PageObject {
             tiempo.until(ExpectedConditions.attributeToBe(cargando,"hidden","true"));
             getDriver().findElement(continuarDatosP).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la pagina de Recogidas","");
             throw new RuntimeException("No cargo la pagina de Recogidas");
         }
     }
@@ -144,9 +170,13 @@ public class DatosPersonalesPage extends PageObject {
                 http.connect();
                 respuesta = http.getResponseCode();
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No se encuentra link del logo","");
                 throw new RuntimeException("No se encuentra link del logo");
             }
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la pagina de datos personales","");
             throw new RuntimeException("No cargo la pagina de datos personales");
         }
     }
@@ -156,6 +186,8 @@ public class DatosPersonalesPage extends PageObject {
             System.out.println("Link de interrapidisimo respondio corectamente");
         }else{
             try{
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","Link de interrapidisimo no responde","");
                 fail("Link de interrapidisimo no responde");
             }catch (final RuntimeException e){
                 assertTrue(true);

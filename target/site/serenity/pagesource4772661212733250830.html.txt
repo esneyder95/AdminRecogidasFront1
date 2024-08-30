@@ -1,0 +1,394 @@
+<html><head><style>.pac-container{background-color:#fff;position:absolute!important;z-index:1000;border-radius:2px;border-top:1px solid #d9d9d9;font-family:Arial,sans-serif;-webkit-box-shadow:0 2px 6px rgba(0,0,0,.3);box-shadow:0 2px 6px rgba(0,0,0,.3);-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden}.pac-logo:after{content:"";padding:1px 1px 1px 0;height:18px;-webkit-box-sizing:border-box;box-sizing:border-box;text-align:right;display:block;background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3.png);background-position:right;background-repeat:no-repeat;-webkit-background-size:120px 14px;background-size:120px 14px}.hdpi.pac-logo:after{background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3_hdpi.png)}.pac-item{cursor:default;padding:0 4px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;line-height:30px;text-align:left;border-top:1px solid #e6e6e6;font-size:11px;color:#515151}.pac-item:hover{background-color:#fafafa}.pac-item-selected,.pac-item-selected:hover{background-color:#ebf2fe}.pac-matched{font-weight:700}.pac-item-query{font-size:13px;padding-right:3px;color:#000}.pac-icon{width:15px;height:20px;margin-right:7px;margin-top:6px;display:inline-block;vertical-align:top;background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons.png);-webkit-background-size:34px 34px;background-size:34px}.hdpi .pac-icon{background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons_hdpi.png)}.pac-icon-search{background-position:-1px -1px}.pac-item-selected .pac-icon-search{background-position:-18px -1px}.pac-icon-marker{background-position:-1px -161px}.pac-item-selected .pac-icon-marker{background-position:-18px -161px}.pac-placeholder{color:gray}.pac-target-input:-webkit-autofill{-webkit-animation-name:beginBrowserAutofill;animation-name:beginBrowserAutofill}.pac-target-input:not(:-webkit-autofill){-webkit-animation-name:endBrowserAutofill;animation-name:endBrowserAutofill}sentinel{}
+</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" href="https://www.interrapidisimo.com/inter_uploads/cropped-Icono-inter-rapidisimo-prospero-01-32x32.png" sizes="32x32">
+    <link rel="icon" href="https://www.interrapidisimo.com/inter_uploads/cropped-Icono-inter-rapidisimo-prospero-01-192x192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://www.interrapidisimo.com/inter_uploads/cropped-Icono-inter-rapidisimo-prospero-01-180x180.png">
+    <base href="/">
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="Librerias/jquery/jquery-ui-1.12.1.min.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
+    <link href="Recogidas_Blazor_WASM.Client.styles.css" rel="stylesheet">
+    <link href="manifest.json" rel="manifest">
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
+    <link href="css/sweetalert2.css" rel="stylesheet">
+    <link href="css/shipping-online-styles.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Recogidas en Casa, solicítala ahora sin costo adicional.</title>
+    <meta name="description" content="Programa la Recogida de tus envíos desde tu casa con Inter Rapidísimo. Recogemos en tu domicilio o en el lugar que desees.">
+    <meta name="google-site-verification" content="0YcFmWJnKS1hbMRZE7Gxss_USNh8GAg9iwhti7Uq_aM">
+    <style>
+        .loader-container img {
+            position: fixed;
+            width: 50px;
+            left: calc(50% - 25px);
+            top: calc(50% - 60px) !important;
+            z-index: 11;
+        }
+
+        .loader-container .loader-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 10;
+        }
+
+        .loader-container p {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            color: #E76100;
+            position: fixed;
+            width: calc(100% - 60px);
+            left: 30px;
+            top: calc(50% + 20px);
+            z-index: 11;
+        }
+
+        @media (max-width: 767px) {
+            .loader-container p {
+                width: calc(100% - 40px);
+                left: 20px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .loader-container p {
+                font-size: 14px;
+            }
+        }
+    </style>
+<script src="./js/JQWidgetInterRapidisimo/ListaPaginadaElementos.js"></script><script src="./js/Controles/TablaUL.js"></script><script src="./js/JQWidgetInterRapidisimo/AutocompleteDireccionGoogleMaps.js"></script><script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIs8QrZvf-DXGWZLDMdpN9y__9BtNeEzE&amp;libraries=places"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/53/12/intl/es_ALL/common.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/53/12/intl/es_ALL/util.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/53/12/intl/es_ALL/controls.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/53/12/intl/es_ALL/places_impl.js"></script></head>
+
+<body>
+
+    <script type="text/javascript" async="" src="https://www.gstatic.com/recaptcha/releases/pCoGBhjs9s8EhFOHJFe8cqis/recaptcha__es.js" crossorigin="anonymous" integrity="sha384-N4wXjROiKjt04AgJ+IS5OnkorQDxopg1j30AcN623FoJmFhKbU6nTwRy5NRYBaRA"></script><script type="text/javascript">
+        console.log(Date.now());
+    </script>
+
+    <div id="app"><!--!--><!--!--><!--!--><!--!--><!--!--><!--!--><!--!--><div b-ufsv1pu1mo=""><div class="shipping-online" b-ufsv1pu1mo=""><!--!--><!--!--><!--!--><div class="blue-background"></div><!--!-->
+<!--!--><!--!--><picture><source srcset="images/empty-image.svg" media="(max-width: 991px)">
+    <source srcset="images/city-image.svg" class="main-image">
+    <img src="images/city-image.svg" class="main-image"></picture><!--!-->
+<!--!--><nav><div class="container"><div class="row"><div class="col-md-7 col-xs-6 title">Datos de la recogida</div><!--!-->
+                        <div class="col-md-5 col-xs-6 logo"><div id="toogle" class="menu-header hide-tablet-mobile"><a class="link-home link-table"><!--!--><img src="images/two-boxes-icon.svg"><!--!--><span>Mis recogidas</span></a><!--!-->
+                                <div class="gray-line hide-tablet-mobile"></div></div><!--!-->
+                            <a href="https://www.interrapidisimo.com"><img src="images/logo-interrapidisimo.svg"></a><!--!-->
+                            <img src="images/icon-menu-hamburger-orange.svg" class="mobile-menu-button show-tablet-mobile"></div></div></div></nav><!--!-->
+<!--!--><!--!--><style>
+    .g-recaptcha {
+        display: block;
+    }
+
+    .mensajeCap {
+        color: #D12200;
+        font-size: 13px;
+        font-weight: 500;
+    }
+</style>
+<div class="container form-container"><div class="row"><!--!--><form id="frmRecogida"><!--!--><!--!--><!--!-->
+            <!--!--><p class="col-xs-12 subtitle">¿Dónde recogemos tus envíos?</p>
+            <div class="form-group col-md-4 col-xs-12"><!--!--><label>Ciudad</label>
+                <input id="Ciudad" type="text" class="form-control ui-autocomplete-input" placeholder="Ej: Bogotá" onblur="llamarComponentesBlazor('DatosRecogidaFormulario','ValidarCalendarioCiudad', this.value)" value="BOGOTA\CUND\COL" autocomplete="off" tabindex="1"><!--!-->
+                <p><!--!--></p></div><!--!-->
+            <div class="form-group col-md-4 col-xs-12"><!--!--><label>Dirección</label>
+                <div class="tooltip-button"><a>En este campo puedes seleccionar o escribir tu dirección.</a></div><!--!-->
+                <input id="txtDireccion" type="text" class="form-control pac-target-input" placeholder="Ej: Calle 1 # 1-1" onblur="ValidarDireccion('DatosRecogidaFormulario','ValidarDireccion', this)" autocomplete="off" tabindex="2"><!--!-->
+                <p><!--!--></p><!--!-->
+                <div id="pac-card" class="form-group col-md-4 col-xs-12"></div>
+                <div id="map" class="col-md-12 justify-content-center text-center"></div></div><!--!-->
+            <div class="form-group col-lg-2 col-md-3 col-xs-12 no-padding-right"><!--!--><label>Complemento dirección</label>
+                <input type="text" id="ComplementoDireccion" class="form-control" placeholder="Ej: Torre 2 Apto 101" tabindex="3"><!--!-->
+                <p><!--!--></p></div><!--!-->
+            <!--!--><p class="col-xs-12 subtitle">¿Cuándo tienes listo tu envío?</p>
+            <div class="form-group col-md-2 col-xs-12"><!--!--><label>Fecha</label>
+                <div class="tooltip-button"><a>Fechas en las que puedes programar tu recogida.</a></div><!--!-->
+                <input id="FechaRecogida" type="text" class="form-control hasDatepicker" placeholder="aaaa-mm-dd" autocomplete="off" readonly="readonly" value="2023-07-26" tabindex="4"><!--!-->
+                <p><!--!--></p></div><!--!-->
+            <div class="form-group col-md-2 col-xs-12 hour-selection"><!--!--><label>Hora : minutos</label>
+                <!--!--><div><select id="HoraRecogida" class="form-control" autocomplete="off"><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option></select>
+                    <span>:</span>
+                    <select id="MinutosRecogida" class="form-control" autocomplete="off"><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option></select></div>
+                <p><!--!--></p></div><!--!-->
+            <div class="form-group col-md-4 col-xs-12"><!--!--><label>Preguntar por</label>
+                <div class="tooltip-button"><a>Puedes delegar a alguien para entregar los envíos.</a></div><!--!-->
+                <input type="text" id="IdPregunta" class="form-control" placeholder="Ej: Diana Velázquez" tabindex="5"><!--!-->
+                <p><!--!--></p></div><!--!-->
+            <div class="clearfix"></div><div class="frequent-courier-section " id="MensajeroFrecuenteFormulario"><!--!--><p class="col-xs-12 subtitle">¿Deseas que tu mensajero favorito recoja tus envíos?<span class="subtitle-tag">Opcional</span></p>
+                    <!--!--><div class="col-md-8 col-xs-12 form-subtitle"><p class="text-description">Busca tu mensajero favorito por número telefónico o por su nombre completo.</p></div>
+                    <div class="clearfix"></div>
+                    <div class="form-group col-md-4 col-xs-12"><input id="txtMensajeroFrecuente" type="text" class="form-control search-field" placeholder="No. de celular o nombre del mensajero" autocomplete="off"><!--!-->
+
+                        <ul class="mensajeroFrecuente"></ul></div><!--!-->
+                    <div class="form-group col-md-4 col-xs-12 tarjetaMensajero hide"><div class="courier-card"><!--!--><img src="images/courier-photo-template.jpg">
+                            <div><p></p><!--!-->
+                                <span><!--!--><img src="images/icon-blue-phone.svg"></span><!--!-->
+                                <a><!--!--><img src="images/delete-icon-orange.svg">Quitar</a></div><!--!-->
+                            <img src="images/check-orange.svg" class="check-icon"></div></div><!--!-->
+                    <div class="clearfix"></div></div><div class="form-group col-md-4 col-xs-12"><div class="section"><!--!--><div id="4f3374e2-03ed-4f15-89bd-6e2693481b5a"><div style="width: 304px; height: 78px;"><div><iframe title="reCAPTCHA" src="https://www.google.com/recaptcha/api2/anchor?ar=1&amp;k=6Lfz85scAAAAABY5UyEQzyJRMKL_lnYFuoUj9hxk&amp;co=aHR0cHM6Ly9yZWNvZ2lkYXNlbmNhc2FxYS5pbnRlcnJhcGlkaXNpbW8uY29tOjQ0Mw..&amp;hl=es&amp;v=pCoGBhjs9s8EhFOHJFe8cqis&amp;size=normal&amp;cb=6jpwougis7oy" width="304" height="78" role="presentation" name="a-5dfbp2egmmo2" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox" cd_frame_id_="c33bf42b92b67ec21aef29f0cfe3fde0"></iframe></div><textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div></div></div><!--!-->
+                <p><!--!--></p></div><!--!-->
+            
+            <div class="form-group col-md-5 col-xs-12 error-input" id=""><div class="checkbox"><label><input type="checkbox" id="chkAcepta1" tabindex="9"><!--!-->
+                        <span class="checkmark"></span> Autorizo el tratamiento de mis datos personales para la finalidad descrita en la <!--!--><a target="_blank" href="https://www.interrapidisimo.com/terminos-condiciones-pre-envios">Política de tratamiento de datos </a>personales de Inter Rapidísimo
+                    </label><!--!-->
+                    <!--!--><div class="validation-message">Debe aceptar Política de tratamiento de datos personales para continuar</div></div><!--!-->
+                <div class="checkbox"><label><input type="checkbox" id="chkAcepta2" tabindex="10"><!--!-->
+                        <span class="checkmark"></span> Acepto los <!--!--><a target="_blank" href="https://www.interrapidisimo.com/terminos-condiciones-pre-envios">Términos y Condiciones</a></label><!--!-->
+                    <!--!--><div class="validation-message">Debe aceptar términos y condiciones para continuar</div></div></div><!--!-->
+            <div class="col-xs-12 buttons-container"><a class="btn btn-link">Regresar</a><!--!-->
+                <button id="Guardar" type="submit" class="btn btn-default" tabindex="11">Crear recogida</button></div></form></div></div><!--!-->
+        <div id="cargando" b-ufsv1pu1mo="" hidden="hidden"><!--!--><!--!--><div class="loader-container"><img src="images/loader-truck.gif">
+    <p>Por favor espera. No cierres la página</p>
+    <div class="loader-background"></div></div></div><!--!-->
+        <!--!--><div id="MensajeCreacionRecogida" class="successful-message-container hide"><div id="MensajeNuevaRecogida" class="successful-message"><div class="top-section"><div><!--!--><p class="main-text">
+                    ¡Tu recogida <span>No. </span><span id="NuevaRecogida"></span> ya está programada!
+                </p>
+                <a class="close-modal-button"><!--!-->
+                    Cerrar
+                    <img src="images/icon-close-modal.svg"></a></div><!--!-->
+            <!--!--><picture class="hide-mobile"><source srcset="images/empty-image.svg" media="(max-width: 767px)">
+                <source srcset="images/image-woman-preparing-delivery.svg" class="successful-message-image">
+                <img src="images/image-woman-preparing-delivery.svg" class="successful-message-image"></picture></div><!--!-->
+        <div class="content-section"><!--!--><div class="text-container"><p class="paragraph">Facilita tu recogida agregando tus envíos. <b>Así podrás saber el número de las guías, el valor aproximado, la fecha estimada de entrega y marcar tus envíos.</b></p></div>
+            <div class="buttons-container"><a class="btn-default"><!--!-->Agregar envíos</a></div></div><!--!-->
+        <!--!--><div class="courier-assignation-message"><img src="images/icon-blue-courier.svg">
+            <p id="MensajeCreacionRecogidaNoAsignada">Asignaremos a uno de nuestros mensajeros para que recoja tu envío. Te enviaremos por mensaje de texto su información de contacto</p>
+            <p id="MensajeCreacionRecogidaAsignada" class="hide">Si el mensajero que seleccionaste no está disponible, asignaremos uno diferente y te enviaremos por mensaje de texto su información de contacto</p></div></div><!--!-->
+    <div class="background-modal"></div></div><!--!-->
+
+
+<div id="EditarRecogida" class="edit-shipping-container hide"><div class="edit-shipping modal-container"><img src="images/icon-close-modal.svg" class="close-modal-button"><!--!-->
+        <!--!--><div class="top-texts"><p>
+                Recogida
+                <span id="EditarRecogidaId">23911</span></p>
+            <p>
+                Recogemos tus envíos el
+                <b id="EditarRecogidaFechaRecogida">18 / Ago/ 2021</b></p></div>
+        <!--!--><div id="PreenviosAsociados"><ul class="preshipping-container preshipping-one"><li class="select-buttons" onclick="selectPreshippingOne()"><div class="check hide-mobile"></div>
+                    <div class="show-mobile"><a class="show-more-button">Ver más<img src="images/arrow-down-orange.svg"></a>
+                        <a class="show-less-button">Ver menos<img src="images/arrow-up-orange.svg"></a></div></li>
+                <li class="number"><a class="hide-mobile">No. de envío</a>
+                    <span title="7500000005296">7500000005296</span></li>
+                <li class="addressee">
+                    Destinatario
+                    <span title="Luisa Fernanda Perez">Luisa Fernanda Perez</span></li>
+                <li class="city">
+                    Ciudad de destino
+                    <span title="Medellín / Ant / Col">Medellín / Ant / Col</span></li>
+                <li class="cost">
+                    Valor
+                    <span title="$19.100">$19.100</span></li>
+                <li class="actions"><a class="download">Descargar etiqueta</a>
+                    <a class="delete" onclick="showDeletePreshipping()">Borrar envío</a></li></ul>
+            <ul class="preshipping-container preshipping-two"><li class="select-buttons" onclick="selectPreshippingTwo()"><div class="check hide-mobile"></div>
+                    <div class="show-mobile"><a class="show-more-button">Ver más<img src="images/arrow-down-orange.svg"></a>
+                        <a class="show-less-button">Ver menos<img src="images/arrow-up-orange.svg"></a></div></li>
+                <li class="number"><a class="hide-mobile">No. de envío</a>
+                    <span title="7500000005297">7500000005297</span></li>
+                <li class="addressee">
+                    Destinatario
+                    <span title="Luisa Fernanda Perez">Luisa Fernanda Perez</span></li>
+                <li class="city">
+                    Ciudad de destino
+                    <span title="Medellín / Ant / Col">Medellín / Ant / Col</span></li>
+                <li class="cost">
+                    Valor
+                    <span title="$19.100">$19.100</span></li>
+                <li class="actions"><a class="download">Descargar etiqueta</a>
+                    <a class="delete" onclick="showDeletePreshipping()">Borrar envío</a></li></ul>
+            
+            <div class="col-xs-12 pagination-container hide"><p>Página</p>
+                <input type="number" value="1">
+                <p>
+                    de
+                    <span>10</span></p>
+                <a class="button previous disabled"></a>
+                <a class="button next"></a></div></div>
+        
+        <!--!--><div class="buttons-container"><a id="btnCancelarRecogida" class="btn btn-link">Cancelar recogida</a>
+            <a id="btnEditarRecogida" class="btn btn-secondary">Editar datos de recogida</a>
+            <a id="btnAsociarPreenvios" class="btn btn-default">Agregar envío</a></div></div><!--!-->
+    <div class="background-modal"></div></div><!--!-->
+
+
+<div id="AsociarPreenvios" class="disassociated-preshippings-container hide"><div class="edit-shipping modal-container"><img src="images/icon-close-modal.svg" class="close-modal-button"><!--!-->
+        <!--!--><div class="top-texts"><p>Tienes envíos sin asociar a recogidas</p>
+            <p>Puedes agregarlos a esta recogida o agregar nuevos envíos</p></div>
+        <form><!--!--><div class="checkbox"><label><input id="SeleccionarTodosPreenviosNoAsociados" type="checkbox">
+                    <span class="checkmark"></span> Seleccionar todos
+                </label></div>
+            <!--!--><div id="PreenviosNoAsociados"><ul class="preshipping-container disassociated-preshipping-one"><li class="select-buttons"><div class="checkbox"><label><input type="checkbox">
+                                <span class="checkmark"></span></label></div>
+                        <div class="show-mobile" onclick="expandDisassociatedPreshippingOne()"><a class="show-more-button">Ver más<img src="images/arrow-down-orange.svg"></a>
+                            <a class="show-less-button">Ver menos<img src="images/arrow-up-orange.svg"></a></div></li>
+                    <li class="number"><a class="hide-mobile">No. de envío</a>
+                        <span title="7500000005296">7500000005296</span></li>
+                    <li class="addressee">
+                        Destinatario
+                        <span title="Luisa Fernanda Perez">Luisa Fernanda Perez</span></li>
+                    <li class="city">
+                        Ciudad de destino
+                        <span title="Medellín / Ant / Col">Medellín / Ant / Col</span></li>
+                    <li class="cost">
+                        Valor
+                        <span title="$19.100">$19.100</span></li>
+                    <li class="expiration">
+                        Vence
+                        <span title="30 / Ago / 2021">30 / Ago / 2021</span></li></ul>
+                <ul class="preshipping-container disassociated-preshipping-two"><li class="select-buttons"><div class="checkbox"><label><input type="checkbox">
+                                <span class="checkmark"></span></label></div>
+                        <div class="show-mobile" onclick="expandDisassociatedPreshippingTwo()"><a class="show-more-button">Ver más<img src="images/arrow-down-orange.svg"></a>
+                            <a class="show-less-button">Ver menos<img src="images/arrow-up-orange.svg"></a></div></li>
+                    <li class="number"><a class="hide-mobile">No. de envío</a>
+                        <span title="7500000005297">7500000005297</span></li>
+                    <li class="addressee">
+                        Destinatario
+                        <span title="Luisa Fernanda Perez">Luisa Fernanda Perez</span></li>
+                    <li class="city">
+                        Ciudad de destino
+                        <span title="Medellín / Ant / Col">Medellín / Ant / Col</span></li>
+                    <li class="cost">
+                        Valor
+                        <span title="$19.100">$19.100</span></li>
+                    <li class="expiration">
+                        Vence
+                        <span title="30 / Ago / 2021">30 / Ago / 2021</span></li></ul></div>
+            <div class="buttons-container"><!--!--><button id="AsociarPrenvios" type="submit" class="btn btn-secondary">Agregar seleccionados</button> 
+                <a class="btn btn-default"><!--!-->Agregar nuevo envío</a></div></form></div><!--!-->
+    <div class="background-modal"></div></div><!--!-->
+
+
+<div id="BorrarPreenvio" class="delete-preshipping-container hide"><div class="delete-preshipping modal-container container"><div class="row"><div class="col-xs-12"><!--!--><p class="title-modal">Borrar envío</p>
+                <img src="images/icon-close-modal.svg" class="close-modal-button"><!--!-->
+                <!--!--><p class="explanatory-text"><span>*</span> Si no te interesa volver a asociar el envío a otra recogida, puedes borrarlo. En caso contrario, desasocia el envío para luego agregarlo a otra recogida nueva o activa.
+                </p>
+                <!--!--><p class="explanatory-text"><span>*</span> Aunque borres o desasocies todos lo envíos, la recogida programada seguirá activa.
+                </p>
+                <!--!--><div class="col-xs-12 buttons-container"><a id="AnularPreenvio" class="btn btn-link">Borrar envío</a>
+                    <a id="LiberarPreenvio" class="btn btn-default">Desasociar envío</a></div></div></div></div><!--!-->
+    <div class="background-modal"></div></div><!--!-->
+
+
+<div id="CancelarRecogida" class="cancel-request-container hide"><div class="cancel-request modal-container container"><div class="row"><div class="col-xs-12"><!--!--><p class="title-modal">¿Deseas cancelar la recogida?</p>
+                <img src="images/icon-close-modal.svg" class="close-modal-button"><!--!-->
+                <form><div class="form-group"><!--!--><label>Selecciona el motivo de cancelación</label>
+                        <select class="form-control"><option value="37">Cancelado Cliente</option></select></div><!--!-->
+                    <!--!--><p class="explanatory-text"><span>*</span> Podrás asociar los envíos de esta recogida a otra que solicites o tengas activa.
+                    </p>
+                    <!--!--><p class="explanatory-text hide"><span>*</span> Los envíos asociados a esta recogida ya no estarán disponibles para asociar a otra recogida.
+                    </p>
+                    <div class="col-xs-12 buttons-container"><button id="GuardarCancelacionRecogida" class="btn btn-link">Si, cancelarla</button><!--!-->
+                        <a class="btn btn-default">No, volver</a></div></form></div></div></div><!--!-->
+    <div class="background-modal"></div></div><!--!-->
+
+
+<div id="CrearPreenvio" class="created-preshipping-container hide"><div class="created-preshipping modal-container container"><div class="row"><div class="col-xs-12"><!--!--><p class="title-modal">¡Etiqueta creada exitosamente!</p>
+                <!--!--><p class="subtitle-modal">Guía No. <span id="IdPreenvio">#############</span></p>
+                <img src="images/icon-close-modal.svg" class="close-modal-button"><!--!-->
+                <!--!--><p class="initial-text">Facilita la logística de tu envío con estos tres sencillos pasos:</p>
+                <!--!--><ul><li><div><img src="images/download-icon-blue.svg" class="download-icon-blue"></div>
+                        <p><b>1</b>Descarga la etiqueta</p></li>
+                    <li class="arrow-right-blue"><img src="images/arrow-right-blue.svg"></li>
+                    <li><div><img src="images/print-icon-blue.svg" class="print-icon-blue"></div>
+                        <p><b>2</b>Imprímela</p></li>
+                    <li class="arrow-right-blue"><img src="images/arrow-right-blue.svg"></li>
+                    <li><div><img src="images/box-sticker-icon-blue.svg" class="box-sticker-icon-blue"></div>
+                        <p><b>3</b>Pégala en tu envío</p></li></ul>
+                <!--!--><div class="col-xs-12 buttons-container"><a id="ImprimirRotulo" class="btn btn-default" onclick="DescargarRotulo(this)">Descargar etiqueta</a></div>
+                <!--!--><p class="explanatory-text"><span>*</span> Esta guía se convertirá en un envío real, únicamente cuando sea recibido y validado por un funcionario autorizado por Interrapidísimo.
+                </p>
+                <div class="col-xs-12 buttons-container"><a class="btn btn-link">Finalizar</a><!--!-->
+                    <!--!--><a id="AgregarPreenvio" class="btn btn-secondary">Agregar otro envío</a></div></div></div></div><!--!-->
+    <div class="background-modal"></div></div><!--!-->
+
+
+<div id="ConfirmarValorComercialPagoEnCasa" class="confirm-commercial-value-container hide"><div class="confirm-commercial-value modal-container container"><div class="row"><div class="col-xs-12"><!--!--><p class="title-modal">Confirma el valor a transferir</p>
+                <img src="images/icon-close-modal.svg" class="close-modal-button"><!--!-->
+                <!--!--><form><!--!--><!--!--><!--!-->
+                    <div class="form-group value-input"><!--!--><label>Valor comercial del envío</label>
+                        <input type="number" class="form-control" placeholder="Ej: 0"><!--!-->
+                        <!--!--><a class="input-other-text">$</a>
+                        <p><!--!--></p></div><!--!-->
+                    <!--!--><p class="initial-text">Este valor será transferido a la cuenta bancaria que tienes inscrita en nuestro portal:</p>
+                    <div class="account-info"><div><a class="account-bank"></a><!--!-->
+                            <a class="account-type"></a></div><!--!-->
+                        <div><a class="account-number"></a></div></div><!--!-->
+                    <!--!--><p class="initial-text">Puedes actualizar tu cuenta bancaria ahora o después de crear la etiqueta.</p>
+                    <!--!--><div class="col-xs-12 buttons-container"><a class="btn btn-link AbrirPortalAutogestion" target="blank">Actualizar cuenta</a>
+                        <button type="submit" class="btn btn-default">Confirmar</button></div></form></div></div></div><!--!-->
+    <div class="background-modal"></div></div><!--!-->
+
+
+<div id="UsuarioSinCuentaBancariaPagoEnCasa" class="no-registered-account-container hide"><div class="no-registered-account modal-container container"><div class="row"><div class="col-xs-12"><!--!--><p class="title-modal">No tienes una cuenta bancaria inscrita en nuestro portal</p>
+                <img src="images/icon-close-modal.svg" class="close-modal-button"><!--!-->
+                <!--!--><p class="initial-text">Ingresa a nuestro portal e inscribe una cuenta bancaria para transferirte el dinero de Pago en Casa.</p>
+                <!--!--><div class="col-xs-12 buttons-container"><a class="btn btn-default AbrirPortalAutogestion" target="blank">Ir al portal</a></div></div></div></div><!--!-->
+    <div class="background-modal"></div></div><!--!-->
+
+
+
+<div id="MensajeNotificacion" class="message-fixed-button hide"><div><!--!--><p id="Notificacion"></p>
+        <img src="images/icon-close-gray.svg"></div></div><!--!-->
+
+
+<div id="MensajeConfirmacion" class="leave-preshipping-container hide"><div class="leave-preshipping modal-container container"><div class="row"><div class="col-xs-12"><!--!--><p id="ConfirmaAccion" class="title-modal"></p>
+                <img src="images/icon-close-modal.svg" class="close-modal-button"><!--!-->
+                <p id="ConfirmaPregunta" class="initial-text"></p>
+                <!--!--><div class="col-xs-12 buttons-container"><a id="ConfirmaAceptada" class="btn btn-link"></a>
+                    <a id="ConfirmaRechazada" class="btn btn-default"></a></div></div></div></div><!--!-->
+    <div class="background-modal"></div></div><!--!-->
+
+
+<div id="MensajeModalTieneRecogidas" class="active-shippings-message-container hide"><div class="active-shippings-message modal-container container"><div class="row"><div class="col-xs-12"><!--!--><p class="title-modal">Tienes recogidas activas</p>
+                <a class="close-modal-button"><!--!-->
+                    Cerrar
+                    <img src="images/icon-close-modal.svg"></a><!--!-->
+                <img src="images/truck-boxes-image.svg">
+                <!--!--><p class="initial-text">Puedes agregar los envíos a tus recogidas activas o solicitar una nueva recogida con una fecha diferente</p>
+                <div class="col-xs-12 buttons-container"><a class="btn btn-link">Solicitar nueva recogida</a><!--!-->
+                    <a class="btn btn-default">Ver mis recogidas</a></div></div></div></div><!--!-->
+    <div class="background-modal"></div></div></div></div></div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="Librerias/jquery/jquery.js"></script>
+    <script src="Librerias/jquery/jquery-ui-1.12.1.min.js"></script>
+
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+
+    <script src="_content/Microsoft.Authentication.WebAssembly.Msal/AuthenticationService.js"></script>
+    <script src="_content/BlazorIndexedDB_Local/dexie.min.js"></script>
+    <script src="_content/BlazorIndexedDB_Local/blazorDB.js"></script>
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <script>
+        Blazor.start({
+            loadBootResource: function (type, name, defaultUri, integrity) {
+                if (type !== 'dotnetjs' && location.hostname !== 'localhost' && location.hostname) {
+                    return fetch(defaultUri, {
+                        cache: 'no-cache',
+                        headers: { 'Custom-Header': 'Custom Value' }
+                    });
+                }
+            }
+        });
+    </script>
+    <script src="js/Interactions-JS-Balzor.js"></script>
+    <script src="js/Interactions-Balzor-JS.js"></script>
+    <script src="js/sweetalert2.js"></script>
+    <script src="js/NetworkConnect.js"></script>
+    <script src="js/script.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LduH4ccAAAAAC9ANcyzknECCO50wl1lYZAgr8BP"></script>
+    <script src="js/script.js"></script>
+
+<script type="text/javascript">var Module; window.__wasmmodulecallback__(); delete window.__wasmmodulecallback__;</script><script src="_framework/dotnet.5.0.17.js" defer=""></script><div><div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; position: fixed; visibility: hidden; display: block; transition: right 0.3s ease 0s; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;"><div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="https://www.google.com/recaptcha/api2/anchor?ar=1&amp;k=6LduH4ccAAAAAC9ANcyzknECCO50wl1lYZAgr8BP&amp;co=aHR0cHM6Ly9yZWNvZ2lkYXNlbmNhc2FxYS5pbnRlcnJhcGlkaXNpbW8uY29tOjQ0Mw..&amp;hl=es&amp;v=pCoGBhjs9s8EhFOHJFe8cqis&amp;size=invisible&amp;cb=p4i7hnhhpo3h" width="256" height="60" role="presentation" name="a-hltjlthq93g7" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div><div class="grecaptcha-error"></div><textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div><iframe style="display: none;"></iframe></div><div style="background-color: rgb(255, 255, 255); border: 1px solid rgb(204, 204, 204); box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 3px; position: absolute; transition: visibility 0s linear 0.3s, opacity 0.3s linear 0s; opacity: 0; visibility: hidden; z-index: 2000000000; left: 112.5px; top: -10000px;"><div style="width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; z-index: 2000000000; background-color: rgb(255, 255, 255); opacity: 0.05;"></div><div class="g-recaptcha-bubble-arrow" style="border-width: 11px; border-style: solid; border-color: transparent rgb(204, 204, 204) transparent transparent; border-image: initial; width: 0px; height: 0px; position: absolute; pointer-events: none; margin-top: -11px; z-index: 2000000000; top: 405.242px; right: 100%;"></div><div class="g-recaptcha-bubble-arrow" style="border-width: 10px; border-style: solid; border-color: transparent rgb(255, 255, 255) transparent transparent; border-image: initial; width: 0px; height: 0px; position: absolute; pointer-events: none; margin-top: -10px; z-index: 2000000000; top: 405.242px; right: 100%;"></div><div style="z-index: 2000000000; position: relative; width: 400px; height: 580px;"><iframe title="El reCAPTCHA caduca dentro de dos minutos" src="https://www.google.com/recaptcha/api2/bframe?hl=es&amp;v=pCoGBhjs9s8EhFOHJFe8cqis&amp;k=6Lfz85scAAAAABY5UyEQzyJRMKL_lnYFuoUj9hxk" name="c-5dfbp2egmmo2" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox" style="width: 400px; height: 580px;"></iframe></div></div><ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div><div class="pac-container pac-logo hdpi" style="display: none;"></div></body></html>

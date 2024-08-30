@@ -69,9 +69,9 @@ Feature: Usuario mapea funciones basicas
 
   @Funcionalidad_basicas @PruebasRegresion
   Scenario Outline: Cliente agrega preenvio con geo
-    Given Ingreso a la pagina de recogidas. <Cedula> <Celular>
+    Given Ingreso a la pagina de recogidas. <Cedula> <Celular> <Cliente agrega preenvio con geo>
     When Ingreso la informacion solicitada.
-    Then la solicitud del preenvio es creada exitosamente <Cedula>
+    Then la solicitud del preenvio es creada exitosamente <Cedula> <Cliente agrega preenvio con geo>
 
     Examples:
       |    Cedula|   Celular|
@@ -93,9 +93,9 @@ Feature: Usuario mapea funciones basicas
 
   @Funcionalidad_basicas @PruebasRegresion
   Scenario Outline: Cliente agrega preenvio sin geo
-    Given Ingreso a la pagina de recogidas. <Cedula> <Celular>
+    Given Ingreso a la pagina de recogidas. <Cedula> <Celular> <Cliente agrega preenvio sin geo>
     When Solicito la informacion solicitada.
-    Then la solicitud del preenvio es creada exitosamente <Cedula>
+    Then la solicitud del preenvio es creada exitosamente <Cedula> <Cliente agrega preenvio sin geo>
 
     Examples:
       |    Cedula|   Celular|

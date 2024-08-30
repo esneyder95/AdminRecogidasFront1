@@ -2,6 +2,8 @@ package com.Inter.AdminRecogidas.pageObjects;
 
 import com.Inter.AdminRecogidas.utils.DataCvs;
 //import org.jruby.RubyProcess;
+import com.Inter.AdminRecogidas.utils.GenerarReporte;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 
 import com.Inter.AdminRecogidas.utils.InteractorTime;
@@ -10,6 +12,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -19,6 +23,7 @@ import static org.junit.Assert.fail;
 public class DatosRecogidaPage extends PageObject {
 
     InteractorTime interactorTime = new InteractorTime();
+    GenerarReporte generarReporte = new GenerarReporte();
     int respuesta = 0;
     public By ciudad = By.id("Ciudad");
     public By direccion = By.id("txtDireccion");
@@ -44,6 +49,8 @@ public class DatosRecogidaPage extends PageObject {
         try {
             tiempo.until(ExpectedConditions.elementToBeClickable(ciudad));
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No carga ventana de recogidas","");
             throw new RuntimeException("No carga pagina de recogidas");
         }
         getDriver().findElement(ciudad).sendKeys("BOGOTA\\CUND\\COL");
@@ -65,6 +72,8 @@ public class DatosRecogidaPage extends PageObject {
                     getDriver().findElement(guardar).click();
                     i=1;
                 }catch (Exception e){
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","No carga Data de cliente frecuente","");
                     throw new RuntimeException("No carga Data de cliente frecuente");
                 }
             }else{
@@ -77,8 +86,11 @@ public class DatosRecogidaPage extends PageObject {
         try {
             tiempo.until(ExpectedConditions.attributeToBe(By.id("MensajeModalTieneRecogidas"),"class","active-shippings-message-container"));
             interactorTime.esperaMilis(1000);
+            generarReporte.TomarPantallazo();
             getDriver().findElement(verrecogidas).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","La ventana de crear/editar recogidas no cargo","");
             throw new RuntimeException("No cargo ventana de crear/editar recogidas");
         }
     }
@@ -87,6 +99,8 @@ public class DatosRecogidaPage extends PageObject {
             tiempo.until(ExpectedConditions.elementToBeClickable(tusrecogidas));
             getDriver().findElement(tusrecogidas).click();
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","La ventana de crear/editar recogidas no cargo","");
             throw new RuntimeException("No cargo ventana de crear/editar recogidas");
         }
     }
@@ -114,9 +128,12 @@ public class DatosRecogidaPage extends PageObject {
                 try{
                     interactorTime.esperaMilis(2000);
                     getDriver().switchTo().defaultContent();
+                    generarReporte.TomarPantallazo();
                     getDriver().findElement(guardar).click();
                     i=1;
                 }catch (Exception e){
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","No carga Data de cliente frecuente","");
                     throw new RuntimeException("No carga Data de cliente frecuente");
                 }
             }else{
@@ -160,6 +177,8 @@ public class DatosRecogidaPage extends PageObject {
                     getDriver().findElement(guardar).click();
                     i=1;
                 }catch (Exception e){
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","No carga Data de cliente frecuente","");
                     throw new RuntimeException("No carga Data de cliente frecuente");
                 }
             }else{
@@ -172,6 +191,8 @@ public class DatosRecogidaPage extends PageObject {
             String Tex = getDriver().findElement(texto).getText();
             System.out.println("" + Tex);
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No carga los datos de recogida","");
             throw new RuntimeException("No carga datos de recogida");
         }
     }
@@ -196,6 +217,8 @@ public class DatosRecogidaPage extends PageObject {
                     getDriver().findElement(guardar).click();
                     i=1;
                 }catch (Exception e){
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","No carga Data de cliente frecuente","");
                     throw new RuntimeException("No carga Data de cliente frecuente");
                 }
             }else{
@@ -224,6 +247,8 @@ public class DatosRecogidaPage extends PageObject {
                     getDriver().findElement(guardar).click();
                     i=1;
                 }catch (Exception e){
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","No carga Data de cliente frecuente","");
                     throw new RuntimeException("No carga Data de cliente frecuente");
                 }
             }else{
@@ -265,6 +290,8 @@ public class DatosRecogidaPage extends PageObject {
                     getDriver().findElement(guardar).click();
                     i=1;
                 }catch (Exception e){
+                    generarReporte.TomarPantallazo();
+                    generarReporte.CasoFallido("","No carga Data de cliente frecuente","");
                     throw new RuntimeException("No carga Data de cliente frecuente");
                 }
             }else{
@@ -285,9 +312,13 @@ public class DatosRecogidaPage extends PageObject {
                 http.connect();
                 respuesta = http.getResponseCode();
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No se encuentra link de politica de datos","");
                 throw new RuntimeException("No se encuentra link de politica de datos");
             }
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la pagina de datos de recogidas","");
             throw new RuntimeException("No cargo la pagina de datos de recogidas");
         }
     }
@@ -297,6 +328,8 @@ public class DatosRecogidaPage extends PageObject {
             System.out.println("Link de politica de datos respondio corectamente");
         }else{
             try{
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","El link de politicas no responde","");
                 fail("El link no responde");
             }catch (final RuntimeException e){
                 assertTrue(true);
@@ -316,9 +349,13 @@ public class DatosRecogidaPage extends PageObject {
                 http.connect();
                 respuesta = http.getResponseCode();
             }catch (Exception e){
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","No se encuentra link de terminos y condiciones","");
                 throw new RuntimeException("No se encuentra link de terminos y condiciones");
             }
         }catch (Exception e){
+            generarReporte.TomarPantallazo();
+            generarReporte.CasoFallido("","No cargo la pagina de datos recogidas","");
             throw new RuntimeException("No cargo la pagina de datos recogidas");
         }
     }
@@ -328,6 +365,8 @@ public class DatosRecogidaPage extends PageObject {
             System.out.println("Link de terminos y condicones respondio corectamente");
         }else{
             try{
+                generarReporte.TomarPantallazo();
+                generarReporte.CasoFallido("","El link de terminos y condicones no responde","");
                 fail("El link de terminos y condicones no responde");
             }catch (final RuntimeException e){
                 assertTrue(true);
